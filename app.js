@@ -45,19 +45,20 @@ const ball = {
 };
 
 
-const ball2 = {
+const snake = {
     x: 200,
     y: 200,
-    vx: 4,
-    vy: 4,
+    vx: 1,
+    vy: 1,
     radius: HEAD_RADIUS,
     draw() {
           
         // snake head
-        ctx.beginPath();
-        ctx.fillStyle = "green";
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-        ctx.fill();
+        roundedRect(ctx, this.x, this.y, 40, 40, 15);
+        // ctx.beginPath();
+        // ctx.fillStyle = "green";
+        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
+        // ctx.fill();
         ctx.beginPath();
         ctx.fillStyle = "red";
         ctx.arc(this.x+(eyePosX), this.y+(eyePosY), 2, 0, Math.PI * 2, true);
@@ -73,13 +74,15 @@ const ball2 = {
         // snake body
         for(let i = 0; i<= bodyLength; i++) {
 
-            setTimeout( () => {
-                roundedRect(ctx, this.x+(i*15), this.y+(i*15), 40, 40, 15);
-                //ctx.beginPath();
-                //ctx.fillStyle = "green";
-                //ctx.arc(this.x+(i*15), this.y+(i*15), this.radius, 0, Math.PI * 2, true);
-                //ctx.fill();
-            },1000+(i*200));
+            roundedRect(ctx, this.x+(i*35), this.y, 40, 40, 15);
+
+            // setTimeout(() => {
+            //     roundedRect(ctx, this.x+(i*35), this.y, 40, 40, 15);
+            //     //ctx.beginPath();
+            //     //ctx.fillStyle = "green";
+            //     //ctx.arc(this.x+(i*15), this.y+(i*15), this.radius, 0, Math.PI * 2, true);
+            //     //ctx.fill();
+            // },1000+(i*200));
 
         }
 
@@ -92,25 +95,25 @@ const ball2 = {
 function draw() {
     ctx.fillStyle = "rgb(255 255 255 / 30%)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ball.draw();
-    ball.x += ball.vx;
-    ball.y += ball.vy;
-    ball.vy *= 0.99;
-    ball.vy += 0.25;
+    //ball.draw();
+    // ball.x += ball.vx;
+    // ball.y += ball.vy;
+    // ball.vy *= 0.99;
+    // ball.vy += 0.25;
 
-    ball2.draw();
+    snake.draw();
 
     if(direction === "x") {
-        ball2.x += ball2.vx;
+        snake.x += snake.vx;
     }
     if(direction === "-x") {
-        ball2.x -= ball2.vx;
+        snake.x -= snake.vx;
     } 
     if(direction === "y") {
-        ball2.y += ball2.vy;
+        snake.y += snake.vy;
     }
     if(direction === "-y") {
-        ball2.y -= ball2.vy;
+        snake.y -= snake.vy;
     }
 
 
@@ -129,16 +132,16 @@ function draw() {
 
     
     if (
-    ball2.y + ball2.vy > canvas.height - ball2.radius ||
-    ball2.y + ball2.vy < ball2.radius
+    snake.y + snake.vy > canvas.height - snake.radius ||
+    snake.y + snake.vy < snake.radius
     ) {
-    ball2.vy = -ball2.vy;
+    snake.vy = -snake.vy;
     }
     if (
-    ball2.x + ball2.vx > canvas.width - ball2.radius ||
-    ball2.x + ball.vx < ball2.radius
+    snake.x + snake.vx > canvas.width - snake.radius ||
+    snake.x + ball.vx < snake.radius
     ) {
-    ball2.vx = -ball2.vx;
+    snake.vx = -snake.vx;
     }
 
     raf = window.requestAnimationFrame(draw);
@@ -200,5 +203,5 @@ window.addEventListener(
     );
 
 
-ball.draw();
-ball2.draw();
+//ball.draw();
+snake.draw();
