@@ -154,7 +154,6 @@ window.addEventListener(
             break;
         case " ":
             bodyLength += 1;
-            console.log(bodyLength);
             break;
         default:
             return; // Quit when this doesn't handle the key event.
