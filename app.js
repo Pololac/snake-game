@@ -4,28 +4,30 @@ const btnStop = document.getElementById("btn-stop");
 const ctx = canvas.getContext("2d");
 let raf;
 
-const HEAD_RADIUS = 15;
+const RECT_RADIUS = 15;
+const RECT_DIM = 40;
 
 // initialize direction
 let direction = "x";
 
 // eyes position
 let eyePosX = 0;
-let eyePosY = HEAD_RADIUS/2;
+let eyePosY = RECT_RADIUS/2;
 
 // body length
 let bodyLength = 3;
 
 // rectangle with border radius
-function roundedRect(ctx, x, y, width, height, radius) {
-  ctx.beginPath();
-  ctx.fillStyle = "green";
-  ctx.moveTo(x, y + radius);
-  ctx.arcTo(x, y + height, x + radius, y + height, radius);
-  ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
-  ctx.arcTo(x + width, y, x + width - radius, y, radius);
-  ctx.arcTo(x, y, x, y + radius, radius);
-  ctx.fill();
+function roundedRect(ctx, x, y, width, height, radius, color) {
+    ctx.beginPath();
+    ctx.moveTo(x, y + radius);
+    ctx.arcTo(x, y + height, x + radius, y + height, radius);
+    ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+    ctx.arcTo(x + width, y, x + width - radius, y, radius);
+    ctx.arcTo(x, y, x, y + radius, radius);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
 }
 
 const ball = {
@@ -50,31 +52,28 @@ const snake = {
     y: 200,
     vx: 1,
     vy: 1,
-    radius: HEAD_RADIUS,
+    width: RECT_DIM,
+    height: RECT_DIM,
+    radius: RECT_RADIUS,
     draw() {
           
         // snake head
-        roundedRect(ctx, this.x, this.y, 40, 40, 15);
+      
         // ctx.beginPath();
         // ctx.fillStyle = "green";
         // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
         // ctx.fill();
-        ctx.beginPath();
-        ctx.fillStyle = "red";
-        ctx.arc(this.x+(eyePosX), this.y+(eyePosY), 2, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fill();
-        ctx.beginPath();
-        ctx.fillStyle = "red";
-        ctx.arc(this.x-(eyePosX), this.y-(eyePosY), 2, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.fill();
+
+        roundedRect(ctx, this.x, this.y, this.width, this.height, this.radius, "green");
+        
+        roundedRect(ctx, this.x+10, this.y+5, 10, 10, 5, "red");
+        roundedRect(ctx, this.x+10, this.y+20, 10, 10, 5, "red");
 
 
         // snake body
-        for(let i = 0; i<= bodyLength; i++) {
+        for(let i = 1; i<= bodyLength; i++) {
 
-            roundedRect(ctx, this.x+(i*35), this.y, 40, 40, 15);
+            roundedRect(ctx, this.x+(i*35), this.y, this.width, this.height, this.radius, "green");
 
             // setTimeout(() => {
             //     roundedRect(ctx, this.x+(i*35), this.y, 40, 40, 15);
@@ -189,7 +188,7 @@ window.addEventListener(
             raf = window.requestAnimationFrame(draw);
             break;
         case " ":
-            bodyLength += 3;
+            bodyLength += 1;
             console.log(bodyLength);
             break;
         default:
