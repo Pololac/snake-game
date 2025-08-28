@@ -8,6 +8,9 @@ const GRID_SIZE = 20;
 
 const RECT_RADIUS = 4;
 
+// game speed
+let gameSpeed = 200;
+
 
 // rectangle with border radius
 function roundedRect(ctx, x, y, width, height, radius, color) {
@@ -31,18 +34,26 @@ let snakeItemsPos = [
 ];
 
 
+// food position
+
+
+function randonFoodPosition(max) {
+    totalGrid = max / GRID_SIZE;
+    return Math.floor(Math.random()*totalGrid);
+}
+
+let foodPosition = {x: randonFoodPosition(canvas.width), y: randonFoodPosition(canvas.height)};
+
+console.log(foodPosition);
+
 // initialize direction
-let direction = "x";
-
-// eyes position
-let eyePosX = GRID_SIZE/2;
-let eyePosY = RECT_RADIUS/2;
-
-// body length
-let bodyLength = 3;
+let xDir = 0;
+let yDir = 0;
 
 
 
+
+// draw snake elements
 function drawSnake() {
 
     snakeItemsPos.forEach((segment, idx) => {
@@ -61,63 +72,52 @@ function drawSnake() {
 
 }
 
+// draw snake food
+function drawFood() {
 
-function draw() {
+    roundedRect(ctx, foodPosition.x*GRID_SIZE, foodPosition.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "red");
 
-    ctx.fillStyle = "rgb(255 255 255 / 30%)";
+}
+
+drawFood();
+ 
+function updateGame() {
+
+    ctx.fillStyle = "rgb(255 255 255 / 80%)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    let timer = setInterval( () => {
+    const HEAD = {
+        x: snakeItemsPos[0].x + xDir,
+        y: snakeItemsPos[0].y + yDir
+    }
 
-        if(direction === "x") {
+    if( (snakeItemsPos[0].x*GRID_SIZE) + GRID_SIZE*2 >= canvas.width || (snakeItemsPos[0].x*GRID_SIZE) - GRID_SIZE <= 0) {
+        clearInterval(gameLoop);
+    }
 
-            for(let i = 0; i < snakeItemsPos.length; i++) {
-                snakeItemsPos[i].x++;
-            }
-            clearInterval(timer);
-        }
+    if( (snakeItemsPos[0].y*GRID_SIZE) + GRID_SIZE*2 >= canvas.height || (snakeItemsPos[0].y*GRID_SIZE) - GRID_SIZE <= 0) {
+        clearInterval(gameLoop);
+    }
 
-        if(direction === "-x") {
-            //
-        } 
-        if(direction === "y") {
-            //
-        }
-        if(direction === "-y") {
-            //
-        }
+    snakeItemsPos.unshift(HEAD);
+    snakeItemsPos.pop();
 
-
-    }, 500);
-
-    
     drawSnake();
-    
-    // // collision
-    // if (
-    // snakeItem.y + snakeItem.vy > canvas.height - snakeItem.radius ||
-    // snakeItem.y + snakeItem.vy < snakeItem.radius
-    // ) {
-    // snakeItem.vy = -snakeItem.vy;
-    // }
-    // if (
-    // snakeItem.x + snakeItem.vx > canvas.width - snakeItem.radius ||
-    // snakeItem.x + snakeItem.vx < snakeItem.radius
-    // ) {
-    // snakeItem.vx = -snakeItem.vx;
-    // }
-
-    raf = window.requestAnimationFrame(draw);
 
 }
 
 
+let gameLoop;
+
+
 btnStart.addEventListener("click", (e) => {
-  raf = window.requestAnimationFrame(draw);
+    gameLoop = setInterval(updateGame, gameSpeed);
+    xDir = 1;
+    yDir = 0;
 });
 
 btnStop.addEventListener("click", (e) => {
-  window.cancelAnimationFrame(raf);
+    clearInterval(gameLoop);
 });
 
 
@@ -130,30 +130,34 @@ window.addEventListener(
 
     switch (event.key) {
         case "ArrowDown":
-            direction = "y";
-            eyePosX = HEAD_RADIUS/2;
-            eyePosY = 0;
+            if(yDir === 0) {
+                yDir = 1;
+            }
+            xDir = 0;
             break;
         case "ArrowUp":
-            direction = "-y";
-            eyePosX = HEAD_RADIUS/2;
-            eyePosY = 0;
+            if(yDir === 0) {
+                yDir = -1;
+            };
+            xDir = 0;
             break;
         case "ArrowLeft":
-            direction = "-x";
-            eyePosX = RECT_DIM/2 - 10;
-            eyePosY = HEAD_RADIUS/2;
+            yDir = 0;
+            if(xDir === 0) {
+                xDir = -1;
+            }
             break;
         case "ArrowRight":
-            direction = "x";
-            eyePosX =  RECT_DIM/2;
-            eyePosY = HEAD_RADIUS/2;
+            yDir = 0;
+            if(xDir === 0) {
+                xDir = 1;
+            }
             break;
         case "Enter":
-            raf = window.requestAnimationFrame(draw);
+            //
             break;
         case " ":
-            bodyLength += 1;
+            //
             break;
         default:
             return; // Quit when this doesn't handle the key event.
@@ -166,5 +170,5 @@ window.addEventListener(
 );
 
 
-//snakeItem.draw();
+
 drawSnake();
