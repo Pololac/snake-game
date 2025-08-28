@@ -9,6 +9,7 @@ const RECT_RADIUS = 4;
 // game speed
 let gameSpeed = 200;
 
+let test;
 
 // rectangle with border radius
 function roundedRect(ctx, x, y, width, height, radius, color) {
