@@ -102,7 +102,7 @@ function draw() {
     }
     if (
     snake.x + snake.vx > canvas.width - snake.radius ||
-    snake.x + ball.vx < snake.radius
+    snake.x + snake.vx < snake.radius
     ) {
     snake.vx = -snake.vx;
     }
