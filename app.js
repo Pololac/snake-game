@@ -30,22 +30,6 @@ function roundedRect(ctx, x, y, width, height, radius, color) {
     ctx.fill();
 }
 
-const ball = {
-    x: 100,
-    y: 100,
-    vx: 5,
-    vy: 2,
-    radius: 25,
-    color: "blue",
-    draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-    ctx.closePath();
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    }
-};
-
 
 const snake = {
     x: 200,
@@ -90,15 +74,9 @@ const snake = {
 
 
 
-
 function draw() {
     ctx.fillStyle = "rgb(255 255 255 / 30%)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    //ball.draw();
-    // ball.x += ball.vx;
-    // ball.y += ball.vy;
-    // ball.vy *= 0.99;
-    // ball.vy += 0.25;
 
     snake.draw();
 
@@ -113,20 +91,6 @@ function draw() {
     }
     if(direction === "-y") {
         snake.y -= snake.vy;
-    }
-
-
-    if (
-    ball.y + ball.vy > canvas.height - ball.radius ||
-    ball.y + ball.vy < ball.radius
-    ) {
-    ball.vy = -ball.vy;
-    }
-    if (
-    ball.x + ball.vx > canvas.width - ball.radius ||
-    ball.x + ball.vx < ball.radius
-    ) {
-    ball.vx = -ball.vx;
     }
 
     
@@ -144,6 +108,7 @@ function draw() {
     }
 
     raf = window.requestAnimationFrame(draw);
+
 }
 
 
@@ -199,8 +164,7 @@ window.addEventListener(
     event.preventDefault();
   },
   true,
-    );
+);
 
 
-//ball.draw();
 snake.draw();
