@@ -2,10 +2,8 @@ const canvas = document.getElementById("canvas");
 const btnStart = document.getElementById("btn-start");
 const btnStop = document.getElementById("btn-stop");
 const ctx = canvas.getContext("2d");
-let raf;
 
 const GRID_SIZE = 20;
-
 const RECT_RADIUS = 4;
 
 // game speed
@@ -79,13 +77,10 @@ function drawFood() {
  
 function updateGame() {
 
-    ctx.fillStyle = "rgb(255 255 255 / 80%)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     let isEating = false;
 
     // create new head
-    const HEAD = {
+    const head = {
         x: snakeItemsPos[0].x + xDir,
         y: snakeItemsPos[0].y + yDir
     }
@@ -101,42 +96,50 @@ function updateGame() {
 
     // check if head position is on the food
     if(snakeItemsPos[0].x === foodPosition.x && snakeItemsPos[0].y === foodPosition.y) {
-        
         isEating = true;
-
         foodPosition = {x: randomFoodPosition(canvas.width), y: randomFoodPosition(canvas.height)};
-
+    }
+    
+    // check if snake head don't touche snake body
+    for(let i = 1; i < snakeItemsPos.length; i++) {
+        if(head.x === snakeItemsPos[i].x && head.y === snakeItemsPos[i].y) {
+            clearInterval(gameLoop);
+            return;
+        }
     }
 
     // add new head and remove last element
-    snakeItemsPos.unshift(HEAD);
+    snakeItemsPos.unshift(head);
 
     // if isEating we keep the last element
     if(isEating === false) {
         snakeItemsPos.pop();
     }
-    
 
+    ctx.fillStyle = "rgb(255 255 255 / 80%)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawSnake();
     drawFood();
 
 }
 
 
+// declare gameLoop for interval id
 let gameLoop;
 
-
+// start new game
 btnStart.addEventListener("click", (e) => {
     gameLoop = setInterval(updateGame, gameSpeed);
     xDir = 1;
     yDir = 0;
 });
 
+// stop game
 btnStop.addEventListener("click", (e) => {
     clearInterval(gameLoop);
 });
 
-
+// event listener keyboard
 window.addEventListener(
   "keydown",
   (event) => {
