@@ -1,2 +1,2 @@
-# snake-game
-Snake game in JS with Canvas API
+# snakeItem-game
+snakeItem game in JS with Canvas API

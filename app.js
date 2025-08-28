@@ -4,18 +4,10 @@ const btnStop = document.getElementById("btn-stop");
 const ctx = canvas.getContext("2d");
 let raf;
 
-const RECT_RADIUS = 15;
-const RECT_DIM = 40;
+const GRID_SIZE = 20;
 
-// initialize direction
-let direction = "x";
+const RECT_RADIUS = 4;
 
-// eyes position
-let eyePosX = 0;
-let eyePosY = RECT_RADIUS/2;
-
-// body length
-let bodyLength = 3;
 
 // rectangle with border radius
 function roundedRect(ctx, x, y, width, height, radius, color) {
@@ -30,82 +22,90 @@ function roundedRect(ctx, x, y, width, height, radius, color) {
     ctx.fill();
 }
 
-
-const snake = {
-    x: 200,
-    y: 200,
-    vx: 1,
-    vy: 1,
-    width: RECT_DIM,
-    height: RECT_DIM,
-    radius: RECT_RADIUS,
-    draw() {
-          
-        // snake head
-      
-        // ctx.beginPath();
-        // ctx.fillStyle = "green";
-        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true);
-        // ctx.fill();
-
-        roundedRect(ctx, this.x, this.y, this.width, this.height, this.radius, "green");
-        
-        roundedRect(ctx, this.x+10, this.y+5, 10, 10, 5, "red");
-        roundedRect(ctx, this.x+10, this.y+20, 10, 10, 5, "red");
+// snake positions
+let snakeItemsPos = [
+    { x: 14, y: 10 },  // head
+    { x: 13, y: 10 },  // segments...
+    { x: 12, y: 10 },
+    { x: 11, y: 10 }
+];
 
 
-        // snake body
-        for(let i = 1; i<= bodyLength; i++) {
+// initialize direction
+let direction = "x";
 
-            roundedRect(ctx, this.x+(i*35), this.y, this.width, this.height, this.radius, "green");
+// eyes position
+let eyePosX = GRID_SIZE/2;
+let eyePosY = RECT_RADIUS/2;
 
-            // setTimeout(() => {
-            //     roundedRect(ctx, this.x+(i*35), this.y, 40, 40, 15);
-            //     //ctx.beginPath();
-            //     //ctx.fillStyle = "green";
-            //     //ctx.arc(this.x+(i*15), this.y+(i*15), this.radius, 0, Math.PI * 2, true);
-            //     //ctx.fill();
-            // },1000+(i*200));
+// body length
+let bodyLength = 3;
 
+
+
+function drawSnake() {
+
+    snakeItemsPos.forEach((segment, idx) => {
+
+        if(idx === 0) {
+            roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "green");
+
+            //roundedRect(ctx, (segment.x*GRID_SIZE)+eyePosX, (segment.y*GRID_SIZE)+5, 10, 10, 5, "red");
+            //roundedRect(ctx, (segment.x*GRID_SIZE)+eyePosX, (segment.y*GRID_SIZE)+20, 10, 10, 5, "red");
+
+        } else {
+            roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "blue");
         }
 
-    }
-};
+    })
 
+}
 
 
 function draw() {
+
     ctx.fillStyle = "rgb(255 255 255 / 30%)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    snake.draw();
+    let timer = setInterval( () => {
 
-    if(direction === "x") {
-        snake.x += snake.vx;
-    }
-    if(direction === "-x") {
-        snake.x -= snake.vx;
-    } 
-    if(direction === "y") {
-        snake.y += snake.vy;
-    }
-    if(direction === "-y") {
-        snake.y -= snake.vy;
-    }
+        if(direction === "x") {
+
+            for(let i = 0; i < snakeItemsPos.length; i++) {
+                snakeItemsPos[i].x++;
+            }
+            clearInterval(timer);
+        }
+
+        if(direction === "-x") {
+            //
+        } 
+        if(direction === "y") {
+            //
+        }
+        if(direction === "-y") {
+            //
+        }
+
+
+    }, 500);
 
     
-    if (
-    snake.y + snake.vy > canvas.height - snake.radius ||
-    snake.y + snake.vy < snake.radius
-    ) {
-    snake.vy = -snake.vy;
-    }
-    if (
-    snake.x + snake.vx > canvas.width - snake.radius ||
-    snake.x + snake.vx < snake.radius
-    ) {
-    snake.vx = -snake.vx;
-    }
+    drawSnake();
+    
+    // // collision
+    // if (
+    // snakeItem.y + snakeItem.vy > canvas.height - snakeItem.radius ||
+    // snakeItem.y + snakeItem.vy < snakeItem.radius
+    // ) {
+    // snakeItem.vy = -snakeItem.vy;
+    // }
+    // if (
+    // snakeItem.x + snakeItem.vx > canvas.width - snakeItem.radius ||
+    // snakeItem.x + snakeItem.vx < snakeItem.radius
+    // ) {
+    // snakeItem.vx = -snakeItem.vx;
+    // }
 
     raf = window.requestAnimationFrame(draw);
 
@@ -141,12 +141,12 @@ window.addEventListener(
             break;
         case "ArrowLeft":
             direction = "-x";
-            eyePosX = 0;
+            eyePosX = RECT_DIM/2 - 10;
             eyePosY = HEAD_RADIUS/2;
             break;
         case "ArrowRight":
             direction = "x";
-            eyePosX = 0;
+            eyePosX =  RECT_DIM/2;
             eyePosY = HEAD_RADIUS/2;
             break;
         case "Enter":
@@ -166,4 +166,5 @@ window.addEventListener(
 );
 
 
-snake.draw();
+//snakeItem.draw();
+drawSnake();
