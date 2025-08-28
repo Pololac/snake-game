@@ -35,21 +35,17 @@ let snakeItemsPos = [
 
 
 // food position
-
-
-function randonFoodPosition(max) {
+function randomFoodPosition(max) {
     totalGrid = max / GRID_SIZE;
     return Math.floor(Math.random()*totalGrid);
 }
 
-let foodPosition = {x: randonFoodPosition(canvas.width), y: randonFoodPosition(canvas.height)};
+let foodPosition = {x: randomFoodPosition(canvas.width), y: randomFoodPosition(canvas.height)};
 
-console.log(foodPosition);
 
 // initialize direction
 let xDir = 0;
 let yDir = 0;
-
 
 
 
@@ -59,12 +55,11 @@ function drawSnake() {
     snakeItemsPos.forEach((segment, idx) => {
 
         if(idx === 0) {
+
             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "green");
 
-            //roundedRect(ctx, (segment.x*GRID_SIZE)+eyePosX, (segment.y*GRID_SIZE)+5, 10, 10, 5, "red");
-            //roundedRect(ctx, (segment.x*GRID_SIZE)+eyePosX, (segment.y*GRID_SIZE)+20, 10, 10, 5, "red");
-
         } else {
+
             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "blue");
         }
 
@@ -79,18 +74,23 @@ function drawFood() {
 
 }
 
-drawFood();
+
+
  
 function updateGame() {
 
     ctx.fillStyle = "rgb(255 255 255 / 80%)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    let isEating = false;
+
+    // create new head
     const HEAD = {
         x: snakeItemsPos[0].x + xDir,
         y: snakeItemsPos[0].y + yDir
     }
 
+    // check if head don't touch borders
     if( (snakeItemsPos[0].x*GRID_SIZE) + GRID_SIZE*2 >= canvas.width || (snakeItemsPos[0].x*GRID_SIZE) - GRID_SIZE <= 0) {
         clearInterval(gameLoop);
     }
@@ -99,10 +99,26 @@ function updateGame() {
         clearInterval(gameLoop);
     }
 
+    // check if head position is on the food
+    if(snakeItemsPos[0].x === foodPosition.x && snakeItemsPos[0].y === foodPosition.y) {
+        
+        isEating = true;
+
+        foodPosition = {x: randomFoodPosition(canvas.width), y: randomFoodPosition(canvas.height)};
+
+    }
+
+    // add new head and remove last element
     snakeItemsPos.unshift(HEAD);
-    snakeItemsPos.pop();
+
+    // if isEating we keep the last element
+    if(isEating === false) {
+        snakeItemsPos.pop();
+    }
+    
 
     drawSnake();
+    drawFood();
 
 }
 
@@ -172,3 +188,4 @@ window.addEventListener(
 
 
 drawSnake();
+drawFood();
