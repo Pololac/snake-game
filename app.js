@@ -158,8 +158,6 @@ function updateGame() {
         setNewGridFlowerPosition();
         drawFlower();
         snakeEatingAudiosound();
-        console.log("updateGame : " + score);
-
     }
 
     // add new head and remove last element
@@ -225,7 +223,7 @@ btnStart.addEventListener("click", (e) => {
 // TO DO
 // Replay game
 btnReplay.addEventListener("click", (e) => {
-
+    
 
 });
 
