@@ -1,7 +1,7 @@
 
 const btnStart = document.getElementById("btn-start");
 const btnReplay = document.getElementById("btn-replay");
-const buttons = document.querySelectorAll("#speed-buttons button");
+const buttons = document.querySelectorAll("button");
 
 const scoreDisplay = document.getElementById("score");
 
@@ -143,7 +143,7 @@ function updateGame() {
         return;
     }
 
-    // check if snake head don't touche snake body
+    // check if snake head don't touch snake body
     for(let i = 1; i < snakeItemsPos.length; i++) {
         if(head.x === snakeItemsPos[i].x && head.y === snakeItemsPos[i].y) {
             gameOver();
@@ -157,7 +157,9 @@ function updateGame() {
         updateScore();
         setNewGridFlowerPosition();
         drawFlower();
+        snakeEatingAudiosound();
         console.log("updateGame : " + score);
+
     }
 
     // add new head and remove last element
@@ -217,7 +219,6 @@ let gameLoop;
 btnStart.addEventListener("click", (e) => {
     xDir = 1;
     yDir = 0;
-    
     gameLoop = setInterval(updateGame, gameSpeed);
 });
 
@@ -283,4 +284,64 @@ displayScore();
 drawSnake();
 setNewGridFlowerPosition()
 drawFlower();
+
+
+// audio animation 
+
+// buttons
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+    if (typeof audioCtx === 'undefined') {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        window.audioCtx = new AudioContext();
+    }
+    
+    if (window.audioCtx) {
+        const oscillator = window.audioCtx.createOscillator();
+        const gainNode = window.audioCtx.createGain();
+        
+        oscillator.type = 'square';
+        oscillator.frequency.setValueAtTime(200, window.audioCtx.currentTime);
+        oscillator.frequency.setValueAtTime(150, window.audioCtx.currentTime + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.1, window.audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.2);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(window.audioCtx.destination);
+        
+        oscillator.start();
+        oscillator.stop(window.audioCtx.currentTime + 0.2);
+    }
+    });
+});
+
+// snake eating audiosound
+
+function snakeEatingAudiosound() {
+
+    if (typeof audioCtx === 'undefined') {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          window.audioCtx = new AudioContext();
+        }
+        
+        if (window.audioCtx) {
+          const oscillator = window.audioCtx.createOscillator();
+          const gainNode = window.audioCtx.createGain();
+          
+          oscillator.type = 'square';
+          oscillator.frequency.setValueAtTime(500, window.audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(700, window.audioCtx.currentTime + 0.1);
+          
+          gainNode.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(window.audioCtx.destination);
+          
+          oscillator.start();
+          oscillator.stop(window.audioCtx.currentTime + 0.1);
+    }
+}
+    
 
