@@ -88,7 +88,7 @@ function updateGame() {
         return;
     }
 
-    // check if snake head don't touche snake body
+    // check if snake head don't touch snake body
     for(let i = 1; i < snakeItemsPos.length; i++) {
         if(head.x === snakeItemsPos[i].x && head.y === snakeItemsPos[i].y) {
             clearInterval(gameLoop);
@@ -273,83 +273,5 @@ function snakeEatingAudiosound() {
           oscillator.stop(window.audioCtx.currentTime + 0.1);
     }
 }
-
-
-// script from interface example
-
-    // Toggle between Grid and List view
-    const viewToggles = document.querySelectorAll('.view-toggle');
-    const cardsContainer = document.querySelector('.cards-container');
-    
-    viewToggles.forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        // Remove active class from all toggles
-        viewToggles.forEach(t => t.classList.remove('active'));
-        
-        // Add active class to clicked toggle
-        toggle.classList.add('active');
-        
-        // Update view
-        const view = toggle.getAttribute('data-view');
-        cardsContainer.className = 'cards-container ' + view + '-view';
-      });
-    });
-    
-    // Randomize Stats Button
-    document.getElementById('randomize-btn').addEventListener('click', () => {
-      const statFills = document.querySelectorAll('.stat-fill');
-      const statValues = document.querySelectorAll('.stat-value');
-      
-      statFills.forEach((fill, index) => {
-        const randomStat = Math.floor(Math.random() * 51) + 50; // Random number between 50-100
-        fill.style.setProperty('--fill-percent', randomStat + '%');
-        
-        // Update the corresponding stat value
-        if (statValues[index]) {
-          statValues[index].textContent = randomStat + '/100';
-        }
-      });
-      
-      // Add glitch effect temporarily
-      const cardNames = document.querySelectorAll('.card-name');
-      cardNames.forEach(name => {
-        name.classList.add('glitch');
-        setTimeout(() => {
-          name.classList.remove('glitch');
-        }, 1000);
-      });
-    });
-    
-    // Add hover sound effect
-    const cards = document.querySelectorAll('.card');
-    
-    cards.forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        // Create audio context only on user interaction
-        if (typeof audioCtx === 'undefined') {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          window.audioCtx = new AudioContext();
-        }
-        
-        if (window.audioCtx) {
-          const oscillator = window.audioCtx.createOscillator();
-          const gainNode = window.audioCtx.createGain();
-          
-          oscillator.type = 'square';
-          oscillator.frequency.setValueAtTime(500, window.audioCtx.currentTime);
-          oscillator.frequency.exponentialRampToValueAtTime(700, window.audioCtx.currentTime + 0.1);
-          
-          gainNode.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
-          
-          oscillator.connect(gainNode);
-          gainNode.connect(window.audioCtx.destination);
-          
-          oscillator.start();
-          oscillator.stop(window.audioCtx.currentTime + 0.1);
-        }
-      });
-    });
-    
     
 
