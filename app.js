@@ -11,6 +11,8 @@ const ctx = canvas.getContext("2d");
 const GRID_SIZE = 20;
 canvas.width = 30 * GRID_SIZE;
 canvas.height = 20 * GRID_SIZE;
+let maxX = canvas.width/GRID_SIZE;
+let maxY = canvas.height/GRID_SIZE;
 
 const RECT_RADIUS = 4;
 
@@ -42,14 +44,6 @@ let snakeItemsPos = [
 ];
 
 
-// food position
-function randomFoodPosition(max) {
-    totalGrid = max / GRID_SIZE;
-    return Math.floor(Math.random()*totalGrid);
-}
-
-let foodPosition = {x: randomFoodPosition(canvas.width), y: randomFoodPosition(canvas.height)};
-
 
 // initialize direction
 let xDir = 0;
@@ -67,9 +61,70 @@ function drawSnake() {
     })
 }
 
+// Positionnement aléatoire dans grille
+function randomCellPosition(max) {
+    totalGrids = max / GRID_SIZE;
+    return Math.floor(Math.random() * totalGrids);
+}
+
+// Convertir coordonnée de grille en pixel (centré dans la case)
+function cellToPx(cellIndex) {
+    return (cellIndex + 0.5) * GRID_SIZE;
+  }
+
+let flowerGridPosition = {};
+
+function setNewGridFlowerPosition() {
+    // Random positon of Flower (en pixel)
+    flowerGridPosition = {x: randomCellPosition(canvas.width), y: randomCellPosition(canvas.height)};
+    console.log(flowerGridPosition);
+    return flowerGridPosition;
+}
+
+let flowerAngle = 0;
+
 // draw snake food
-function drawFood() {
-    roundedRect(ctx, foodPosition.x*GRID_SIZE, foodPosition.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "red");
+function drawFlower() {
+    // Diamètre < 20px (taille d'une cellule)
+    const petalR = 4;   // rayon d'un pétale en px
+    const centerR = 3;  // rayon du cœur
+    const offset = 5;  // distance du centre vers chaque pétale
+  
+    // position du centre de la fleur (en pixel)
+    let flowerPixelPosition = {x: cellToPx(flowerGridPosition.x), y: cellToPx(flowerGridPosition.y)};
+    console.log(flowerPixelPosition);
+
+    // Pour l'animation de la fleur
+    ctx.save();                // sauve l’état actuel du canvas
+    ctx.translate(flowerPixelPosition.x, flowerPixelPosition.y);       // déplace le point d’origine au centre de la fleur
+    ctx.rotate(flowerAngle);   // applique une rotation autour du centre
+    
+    // Petales (4 petits cercles autour du centre)
+    for (let i = 0; i < 4; i++) {
+        ctx.fillStyle = "#000";
+        const angle = (i * 2 * Math.PI) / 4;
+        const px = flowerPixelPosition.x + Math.cos(angle) * offset;
+        const py = flowerPixelPosition.y + Math.sin(angle) * offset;
+        
+        ctx.beginPath();
+        ctx.arc(px, py, petalR, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    
+    // Coeur
+    ctx.fillStyle = "#ffd34d"; // jaune
+
+    ctx.beginPath();
+    ctx.arc(flowerPixelPosition.x, flowerPixelPosition.y, centerR, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore(); // restaure l’état du canvas (pas de rotation pour le reste)
+
+}
+
+// --- Boucle d’animation ---
+function animateFlower() {
+    flowerAngle += 0.02; // incrémente l’angle pour faire tourner
 }
 
  
@@ -83,24 +138,25 @@ function updateGame() {
     }
 
     // check if head don't touch borders
-    if (snakeItemsPos[0].x >= canvas.width/GRID_SIZE || snakeItemsPos[0].x < 0 || snakeItemsPos[0].y >= canvas.height/GRID_SIZE || snakeItemsPos[0].y < 0){
-        clearInterval(gameLoop);
+    if (snakeItemsPos[0].x >= maxX || snakeItemsPos[0].x < 0 || snakeItemsPos[0].y >= maxY || snakeItemsPos[0].y < 0){
+        gameOver();
         return;
     }
 
     // check if snake head don't touche snake body
     for(let i = 1; i < snakeItemsPos.length; i++) {
         if(head.x === snakeItemsPos[i].x && head.y === snakeItemsPos[i].y) {
-            clearInterval(gameLoop);
+            gameOver();
             return;
         }
     }
 
     // check if head position is on the food
-    if(snakeItemsPos[0].x === foodPosition.x && snakeItemsPos[0].y === foodPosition.y) {
+    if(snakeItemsPos[0].x === flowerGridPosition.x && snakeItemsPos[0].y === flowerGridPosition.y) {
         isEating = true;
-        foodPosition = {x: randomFoodPosition(canvas.width), y: randomFoodPosition(canvas.height)};
         updateScore();
+        setNewGridFlowerPosition();
+        drawFlower();
         console.log("updateGame : " + score);
     }
 
@@ -117,7 +173,8 @@ function updateGame() {
     ctx.fillStyle = "rgb(255 255 255 / 80%)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawSnake();
-    drawFood();
+    drawFlower();
+    animateFlower()
 
 }
 
@@ -131,6 +188,16 @@ function displayScore() {
     return scoreDisplay.innerText = `Score : ${score}`;
 }
 
+// Game over
+function gameOver() {
+    clearInterval(gameLoop);
+
+    ctx.fillStyle = "rgb(0 0 0)"
+    ctx.font = "48px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+}
 
 
 // Difficulty choice
@@ -214,5 +281,6 @@ window.addEventListener(
 
 displayScore();
 drawSnake();
-drawFood();
+setNewGridFlowerPosition()
+drawFlower();
 
