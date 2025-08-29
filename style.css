@@ -1,24 +1,3 @@
-
-canvas {
-    border: 1px solid black;
-}
-
-button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: 1px solid #333;
-    border-radius: 10px;
-    background: #f0f0f0;
-    cursor: pointer;
-}
-
-.active {
-    background: #06467a; /* ta couleur "light-blue" */
-    color: white;
-    font-weight: bold;
-}
-
-
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 * {
@@ -59,6 +38,9 @@ body {
   margin: 0 auto;
 }
 
+
+/* header */
+
 header {
   text-align: center;
   margin-bottom: 30px;
@@ -82,11 +64,20 @@ header {
 }
 
 
+
+/* game display section */
+
+.game-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
 canvas {
   background-color: var(--dark);
   border: var(--pixel-size) solid var(--light);
-  position: relative;
-  cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 2px;
   overflow: hidden;
@@ -94,12 +85,6 @@ canvas {
 }
 
 canvas::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   background-image: 
     linear-gradient(rgba(26, 26, 46, 0.1), rgba(26, 26, 46, 0.1)),
     repeating-linear-gradient(0deg, transparent, transparent var(--pixel-size), rgba(255, 255, 255, 0.05) var(--pixel-size), rgba(255, 255, 255, 0.05) calc(var(--pixel-size) * 2)),
@@ -109,151 +94,37 @@ canvas::before {
 }
 
 
+/* controls */
 
-.cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 25px;
+.controls {
+  display: flex;
   justify-content: center;
-  margin-bottom: 30px;
+  align-items: center;
+  flex-direction: column;
+  margin: 20px auto;
+  gap: 15px;
 }
 
-.card {
+.controls p {
+    font-size: 10px;
+}
+
+.view-toggle {
   background-color: var(--dark);
-  border: var(--pixel-size) solid var(--light);
-  position: relative;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 2px;
-  overflow: hidden;
-  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
-}
-
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.4);
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    linear-gradient(rgba(26, 26, 46, 0.1), rgba(26, 26, 46, 0.1)),
-    repeating-linear-gradient(0deg, transparent, transparent var(--pixel-size), rgba(255, 255, 255, 0.05) var(--pixel-size), rgba(255, 255, 255, 0.05) calc(var(--pixel-size) * 2)),
-    repeating-linear-gradient(90deg, transparent, transparent var(--pixel-size), rgba(255, 255, 255, 0.05) var(--pixel-size), rgba(255, 255, 255, 0.05) calc(var(--pixel-size) * 2));
-  pointer-events: none;
-  z-index: 2;
-}
-
-.card-inner {
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-}
-
-.pixel-art {
-  width: 80px;
-  height: 80px;
-  margin: 10px 0;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  transform-origin: center;
-  transition: transform 0.3s ease;
-  position: relative;
-  z-index: 1;
-}
-
-.card:hover .pixel-art {
-  animation: bounce 0.5s infinite alternate;
-}
-
-.card-name {
-  font-size: 12px;
-  text-align: center;
-  margin: 10px 0;
-  color: var(--primary);
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
-}
-
-.card-game {
-  font-size: 8px;
-  text-align: center;
-  color: var(--secondary);
-  margin-bottom: 10px;
-}
-
-.card-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(26, 26, 46, 0.9);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 3;
-  border-width: var(--pixel-size);
-  border-style: solid;
-  border-color: var(--secondary);
-  transform: scale(0.95);
-  backdrop-filter: blur(3px);
-}
-
-.card:hover .card-overlay {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.stat {
-  font-size: 8px;
-  margin: 3px 0;
-  text-align: center;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.stat-label {
-  color: var(--console-green);
-}
-
-.stat-value {
   color: var(--light);
+  border: 2px solid var(--secondary);
+  padding: 8px 16px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.stat-bar {
-  height: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
-  margin-top: 5px;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+.active {
+  background-color: var(--secondary);
+  color: var(--dark);
 }
 
-.stat-fill {
-  height: 100%;
-  background-color: var(--primary);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  transition: width 0.5s ease;
-}
-
-.card:hover .stat-fill {
-  animation: fillBar 0.8s forwards;
-}
 
 .retro-btn {
   margin-top: 20px;
@@ -279,36 +150,10 @@ canvas::before {
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 
-.controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 15px;
-}
 
-.view-toggle {
-  background-color: var(--dark);
-  color: var(--light);
-  border: 2px solid var(--secondary);
-  padding: 8px 16px;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
 
-.view-toggle.active {
-  background-color: var(--secondary);
-  color: var(--dark);
-}
 
-.special-move {
-  color: var(--primary);
-  font-size: 10px;
-  margin-top: 10px;
-  text-align: center;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
-}
+/* footer */
 
 .footer {
   margin-top: 30px;
@@ -318,66 +163,7 @@ canvas::before {
   text-align: center;
 }
 
-/* Scanline effect */
-.scanline {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    to bottom,
-    transparent 50%,
-    rgba(0, 0, 0, 0.05) 50%
-  );
-  background-size: 100% 4px;
-  z-index: 999;
-  pointer-events: none;
-  opacity: 0.3;
-}
 
-/* CRT effect */
-.crt-effect {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 0%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
-  pointer-events: none;
-  z-index: 998;
-}
-
-@keyframes bounce {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes fillBar {
-  0% {
-    width: 0;
-  }
-  100% {
-    width: var(--fill-percent);
-  }
-}
-
-@keyframes flicker {
-  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
-    opacity: 1;
-  }
-  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
-    opacity: 0.8;
-  }
-}
 
 @media (max-width: 600px) {
   .cards-container {
