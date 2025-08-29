@@ -1,16 +1,31 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+    <title>Snake Game</title>
 </head>
 <body>
   <div class="scanline"></div>
   <div class="crt-effect"></div>
 
   <div class="container">
+
     <header>
-      <h1 class="title">PIXEL LEGENDS</h1>
-      <p class="subtitle">RETRO GAMING HALL OF FAME</p>
+      <h1 class="title">SNAKE GAME</h1>
+      <p class="subtitle">RETRO GAMING SNAKE</p>
     </header>
+
+
+    <button id="btn-start">
+        Start
+    </button>
+    <button id="btn-stop">
+        Stop
+    </button>
+    <canvas id="canvas" width="800" height="600"></canvas>
 
     <div class="controls">
       <button class="view-toggle active" data-view="grid">GRID VIEW</button>
