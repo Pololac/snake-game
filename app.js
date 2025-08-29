@@ -1,14 +1,24 @@
-const canvas = document.getElementById("canvas");
+
 const btnStart = document.getElementById("btn-start");
-const btnStop = document.getElementById("btn-stop");
+const btnReplay = document.getElementById("btn-replay");
+const buttons = document.querySelectorAll("#speed-buttons button");
+
+const scoreDisplay = document.getElementById("score");
+
+const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const GRID_SIZE = 20;
+canvas.width = 30 * GRID_SIZE;
+canvas.height = 20 * GRID_SIZE;
+
 const RECT_RADIUS = 4;
 
 // game speed
-let gameSpeed = 200;
+let gameSpeed = 400;
 
+// score
+let score = 0;
 
 // rectangle with border radius
 function roundedRect(ctx, x, y, width, height, radius, color) {
@@ -46,37 +56,24 @@ let xDir = 0;
 let yDir = 0;
 
 
-
 // draw snake elements
 function drawSnake() {
-
     snakeItemsPos.forEach((segment, idx) => {
-
         if(idx === 0) {
-
             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "green");
-
         } else {
-
             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "blue");
         }
-
     })
-
 }
 
 // draw snake food
 function drawFood() {
-
     roundedRect(ctx, foodPosition.x*GRID_SIZE, foodPosition.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "red");
-
 }
-
-
 
  
 function updateGame() {
-
     let isEating = false;
 
     // create new head
@@ -86,26 +83,25 @@ function updateGame() {
     }
 
     // check if head don't touch borders
-    if( (snakeItemsPos[0].x*GRID_SIZE) + GRID_SIZE*2 >= canvas.width || (snakeItemsPos[0].x*GRID_SIZE) - GRID_SIZE <= 0) {
+    if (snakeItemsPos[0].x >= canvas.width/GRID_SIZE || snakeItemsPos[0].x < 0 || snakeItemsPos[0].y >= canvas.height/GRID_SIZE || snakeItemsPos[0].y < 0){
         clearInterval(gameLoop);
+        return;
     }
 
-    if( (snakeItemsPos[0].y*GRID_SIZE) + GRID_SIZE*2 >= canvas.height || (snakeItemsPos[0].y*GRID_SIZE) - GRID_SIZE <= 0) {
-        clearInterval(gameLoop);
-    }
-
-    // check if head position is on the food
-    if(snakeItemsPos[0].x === foodPosition.x && snakeItemsPos[0].y === foodPosition.y) {
-        isEating = true;
-        foodPosition = {x: randomFoodPosition(canvas.width), y: randomFoodPosition(canvas.height)};
-    }
-    
     // check if snake head don't touche snake body
     for(let i = 1; i < snakeItemsPos.length; i++) {
         if(head.x === snakeItemsPos[i].x && head.y === snakeItemsPos[i].y) {
             clearInterval(gameLoop);
             return;
         }
+    }
+
+    // check if head position is on the food
+    if(snakeItemsPos[0].x === foodPosition.x && snakeItemsPos[0].y === foodPosition.y) {
+        isEating = true;
+        foodPosition = {x: randomFoodPosition(canvas.width), y: randomFoodPosition(canvas.height)};
+        updateScore();
+        console.log("updateGame : " + score);
     }
 
     // add new head and remove last element
@@ -116,6 +112,8 @@ function updateGame() {
         snakeItemsPos.pop();
     }
 
+    displayScore();
+
     ctx.fillStyle = "rgb(255 255 255 / 80%)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawSnake();
@@ -123,20 +121,44 @@ function updateGame() {
 
 }
 
+// Update score
+function updateScore() {
+    score += 1;
+}
+
+// Display score
+function displayScore() {
+    return scoreDisplay.innerText = `Score : ${score}`;
+}
+
+
+
+// Difficulty choice
+buttons.forEach (btn => {
+    btn.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        gameSpeed = btn.dataset.speed;
+    });
+});
+
 
 // declare gameLoop for interval id
 let gameLoop;
 
 // start new game
 btnStart.addEventListener("click", (e) => {
-    gameLoop = setInterval(updateGame, gameSpeed);
     xDir = 1;
     yDir = 0;
+    
+    gameLoop = setInterval(updateGame, gameSpeed);
 });
 
-// stop game
-btnStop.addEventListener("click", (e) => {
-    clearInterval(gameLoop);
+// TO DO
+// Replay game
+btnReplay.addEventListener("click", (e) => {
+
+
 });
 
 // event listener keyboard
@@ -190,5 +212,6 @@ window.addEventListener(
 
 
 
+displayScore();
 drawSnake();
 drawFood();

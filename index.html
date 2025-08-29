@@ -19,13 +19,18 @@
     </header>
 
 
-    <button id="btn-start">
-        Start
-    </button>
-    <button id="btn-stop">
-        Stop
-    </button>
-    <canvas id="canvas" width="800" height="600"></canvas>
+
+    <div id="speed-buttons">
+        <button data-speed="400" class="active">Limace</button>
+        <button data-speed="200">Vers</button>
+        <button data-speed="100">Python</button>
+    </div>
+    <button id="btn-start">Start</button>
+    <button id="btn-replay">Rejouer</button>
+    <canvas id="canvas"></canvas>
+    
+    <div id="score">Score :</div>
+
 
     <div class="controls">
       <button class="view-toggle active" data-view="grid">GRID VIEW</button>

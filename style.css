@@ -1,8 +1,23 @@
 
 canvas {
     border: 1px solid black;
-
 }
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.active {
+    background: #06467a; /* ta couleur "light-blue" */
+    color: white;
+    font-weight: bold;
+}
+
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
@@ -481,4 +496,5 @@ canvas::before {
   62% {
     transform: translate(-22px, 5px) skew(21deg);
   }
+
 }
