@@ -35,7 +35,6 @@ function roundedRect(ctx, x, y, width, height, radius, color) {
     ctx.fill();
 }
 
-
 // snake positions
 let snakeItemsPos = [
     { x: 14, y: 10 },  // head
@@ -85,13 +84,48 @@ function setNewGridFlowerPosition() {
 let flowerAngle = 0;
 
 // draw snake food
-function drawFood() {
+function drawFlower() {
+    // Diamètre < 20px (taille d'une cellule)
+    const petalR = 4;   // rayon d'un pétale en px
+    const centerR = 3;  // rayon du cœur
+    const offset = 5;  // distance du centre vers chaque pétale
+  
+    // position du centre de la fleur (en pixel)
+    let flowerPixelPosition = {x: cellToPx(flowerGridPosition.x), y: cellToPx(flowerGridPosition.y)};
+    console.log(flowerPixelPosition);
 
-    roundedRect(ctx, foodPosition.x*GRID_SIZE, foodPosition.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "red");
+    // Pour l'animation de la fleur
+    ctx.save();                // sauve l’état actuel du canvas
+    ctx.translate(flowerPixelPosition.x, flowerPixelPosition.y);       // déplace le point d’origine au centre de la fleur
+    ctx.rotate(flowerAngle);   // applique une rotation autour du centre
+    
+    // Petales (4 petits cercles autour du centre)
+    for (let i = 0; i < 4; i++) {
+        ctx.fillStyle = "#000";
+        const angle = (i * 2 * Math.PI) / 4;
+        const px = flowerPixelPosition.x + Math.cos(angle) * offset;
+        const py = flowerPixelPosition.y + Math.sin(angle) * offset;
+        
+        ctx.beginPath();
+        ctx.arc(px, py, petalR, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    
+    // Coeur
+    ctx.fillStyle = "#ffd34d"; // jaune
+
+    ctx.beginPath();
+    ctx.arc(flowerPixelPosition.x, flowerPixelPosition.y, centerR, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore(); // restaure l’état du canvas (pas de rotation pour le reste)
 
 }
 
-
+// --- Boucle d’animation ---
+function animateFlower() {
+    flowerAngle += 0.02; // incrémente l’angle pour faire tourner
+}
 
  
 function updateGame() {
@@ -124,6 +158,8 @@ function updateGame() {
         setNewGridFlowerPosition();
         drawFlower();
         snakeEatingAudiosound();
+        console.log("updateGame : " + score);
+
     }
 
     // add new head and remove last element
@@ -133,6 +169,8 @@ function updateGame() {
     if(isEating === false) {
         snakeItemsPos.pop();
     }
+
+    displayScore();
 
     ctx.fillStyle = "rgb(255 255 255 / 80%)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -187,7 +225,7 @@ btnStart.addEventListener("click", (e) => {
 // TO DO
 // Replay game
 btnReplay.addEventListener("click", (e) => {
-    
+
 
 });
 
@@ -239,6 +277,7 @@ window.addEventListener(
   },
   true,
 );
+
 
 
 displayScore();
