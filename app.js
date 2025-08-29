@@ -138,7 +138,7 @@ function updateGame() {
     }
 
     // check if head don't touch borders
-    if (snakeItemsPos[0].x >= maxX || snakeItemsPos[0].x < 0 || snakeItemsPos[0].y >= maxY || snakeItemsPos[0].y < 0){
+    if (head.x >= maxX || head.x < 0 || head.y >= maxY || head.y < 0){
         gameOver();
         return;
     }
@@ -176,7 +176,7 @@ function updateGame() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     drawSnake();
     drawFlower();
-    animateFlower()
+    //animateFlower();
 
 }
 
@@ -207,7 +207,7 @@ buttons.forEach (btn => {
     btn.addEventListener("click", () => {
         buttons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        gameSpeed = btn.dataset.speed;
+        parseInt(btn.dataset.speed, 10);
     });
 });
 
@@ -216,7 +216,7 @@ buttons.forEach (btn => {
 let gameLoop;
 
 // start new game
-btnStart.addEventListener("click", (e) => {
+btnStart.addEventListener("click", () => {
     xDir = 1;
     yDir = 0;
     gameLoop = setInterval(updateGame, gameSpeed);
@@ -224,7 +224,7 @@ btnStart.addEventListener("click", (e) => {
 
 // TO DO
 // Replay game
-btnReplay.addEventListener("click", (e) => {
+btnReplay.addEventListener("click", () => {
 
 
 });
