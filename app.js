@@ -1,6 +1,6 @@
 
 const btnStart = document.getElementById("btn-start");
-const btnStop = document.getElementById("btn-stop");
+const btnReplay = document.getElementById("btn-replay");
 const buttons = document.querySelectorAll("#speed-buttons button");
 
 const scoreDisplay = document.getElementById("score");
@@ -9,6 +9,9 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 const GRID_SIZE = 20;
+canvas.width = 30 * GRID_SIZE;
+canvas.height = 20 * GRID_SIZE;
+
 const RECT_RADIUS = 4;
 
 // game speed
@@ -55,20 +58,13 @@ let yDir = 0;
 
 // draw snake elements
 function drawSnake() {
-
     snakeItemsPos.forEach((segment, idx) => {
-
         if(idx === 0) {
-
             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "green");
-
         } else {
-
             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "blue");
         }
-
     })
-
 }
 
 // draw snake food
@@ -87,12 +83,9 @@ function updateGame() {
     }
 
     // check if head don't touch borders
-    if( (snakeItemsPos[0].x*GRID_SIZE) + GRID_SIZE*2 >= canvas.width || (snakeItemsPos[0].x*GRID_SIZE) - GRID_SIZE <= 0) {
+    if (snakeItemsPos[0].x >= canvas.width/GRID_SIZE || snakeItemsPos[0].x < 0 || snakeItemsPos[0].y >= canvas.height/GRID_SIZE || snakeItemsPos[0].y < 0){
         clearInterval(gameLoop);
-    }
-
-    if( (snakeItemsPos[0].y*GRID_SIZE) + GRID_SIZE*2 >= canvas.height || (snakeItemsPos[0].y*GRID_SIZE) - GRID_SIZE <= 0) {
-        clearInterval(gameLoop);
+        return;
     }
 
     // check if snake head don't touche snake body
@@ -140,7 +133,7 @@ function displayScore() {
 
 
 
-// choice of difficulty
+// Difficulty choice
 buttons.forEach (btn => {
     btn.addEventListener("click", () => {
         buttons.forEach(b => b.classList.remove("active"));
@@ -155,16 +148,17 @@ let gameLoop;
 
 // start new game
 btnStart.addEventListener("click", (e) => {
-
-    
-    gameLoop = setInterval(updateGame, gameSpeed);
     xDir = 1;
     yDir = 0;
+    
+    gameLoop = setInterval(updateGame, gameSpeed);
 });
 
-// stop game
-btnStop.addEventListener("click", (e) => {
-    clearInterval(gameLoop);
+// TO DO
+// Replay game
+btnReplay.addEventListener("click", (e) => {
+
+
 });
 
 // event listener keyboard
@@ -217,7 +211,8 @@ window.addEventListener(
 );
 
 
+
+displayScore();
 drawSnake();
 drawFood();
-displayScore();
 
