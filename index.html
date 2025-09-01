@@ -5,14 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
-    <title>snakeItem</title>
+    <title>Snake Game</title>
 </head>
 <body>
+  <div class="scanline"></div>
+  <div class="crt-effect"></div>
 
-    <div id="speed-buttons">
-        <button data-speed="400" class="active">Limace</button>
-        <button data-speed="200">Vers</button>
-        <button data-speed="100">Python</button>
+  <div class="container">
+
+    <header>
+      <h1 class="title">SNAKE GAME</h1>
+      <p class="subtitle">RETRO GAMING ENTERTAINMENT</p>
+    </header>
+
+
+    <div class="controls">
+
+      <p>Choose game difficulty</p>
+
+      <div id="speed-buttons">
+        <button data-speed="400" class="view-toggle active">Slug</button>
+        <button data-speed="200" class="view-toggle">Worm</button>
+        <button data-speed="100" class="view-toggle">Viper</button>
+      </div>
+
     </div>
 
     <section class="game-display">
@@ -26,6 +42,11 @@
       <button class="retro-btn" id="btn-replay">Replay</button>
     </div>
     
-
+    
+    <footer class="footer">
+      © 2023 PIXEL LEGENDS • PRESS START TO PLAY
+    </footer>
+  </div>
+  
 </body>
 </html>
