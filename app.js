@@ -43,118 +43,54 @@ let snakeItemsPos = [
     { x: 11, y: 10 }
 ];
 
-// flower position
+// flower position 
 let flowerGridPosition = setNewGridFlowerPosition(canvas);
 let flowerAngle = 0;
 
-// draw intialise
+// draw intialise //
 drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS);
 drawFlower(ctx, flowerGridPosition, flowerAngle);
 displayScore();
 
 
-// utils //
-// // Positionnement aléatoire dans grille
-// function randomCellPosition(max) {
-//     totalGrids = max / GRID_SIZE;
-//     return Math.floor(Math.random() * totalGrids);
-// }
+// button events //
 
-// // Convertir coordonnée de grille en pixel (centré dans la case)
-// function cellToPx(cellIndex) {
-//     return (cellIndex + 0.5) * GRID_SIZE;
-// }
+// Replay game - reset the game at initial state
+btnReplay.addEventListener("click", () => {
+    resetGameToInitialState();
+});
 
-
-// snake design //
-// // rectangle with border radius
-// function roundedRect(ctx, x, y, width, height, radius, color) {
-//     ctx.beginPath();
-//     ctx.moveTo(x, y + radius);
-//     ctx.arcTo(x, y + height, x + radius, y + height, radius);
-//     ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
-//     ctx.arcTo(x + width, y, x + width - radius, y, radius);
-//     ctx.arcTo(x, y, x, y + radius, radius);
-//     ctx.closePath();
-//     ctx.fillStyle = color;
-//     ctx.fill();
-// }
+// Difficulty choice
+btnSpeedChoice.forEach (btn => {
+    btn.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        gameSpeed = btn.dataset.speed, 10;
+        console.log(gameSpeed);
+    });
+});
 
 
-// // draw snake elements
-// function drawSnake() {
-//     snakeItemsPos.forEach((segment, idx) => {
-//         if(idx === 0) {
-//             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "green");
-//         } else {
-//             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "blue");
-//         }
-//     })
-// }
+// start game
+btnStart.addEventListener("click", () => {
+    direction.x = 1;
+    direction.y = 0;
+    if(gameLoop == null) {
+        gameLoop = setInterval(updateGame, gameSpeed);
+    } 
+});
 
 
+// button sounds
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        activateButtonSound();
+    });
+});
 
-// flower design //
-// function setNewGridFlowerPosition() {
-//     // Random positon of Flower (en pixel)
-//     flowerGridPosition = {
-//         x: randomCellPosition(canvas.width),
-//         y: randomCellPosition(canvas.height)
-//     };
 
-//     // Donne un boost de vitesse à la nouvelle fleur
-//     speed = 3; // tours par seconde au départ
-// }
-
-// // draw Flower
-// function drawFlower() {
-//     // Diamètre < 20px (taille d'une cellule)
-//     const petalR = 4;   // rayon d'un pétale en px
-//     const centerR = 3;  // rayon du cœur
-//     const offset = 5;  // distance du centre vers chaque pétale
-  
-//     // position du centre de la fleur (en pixel)
-//     const px = cellToPx(flowerGridPosition.x);
-//     const py = cellToPx(flowerGridPosition.y);
-
-//     // Pour l'animation de la fleur
-//     ctx.save();                // sauve l’état actuel du canvas
-//     ctx.translate(px, py);       // déplace le point d’origine au centre de la fleur
-//     ctx.rotate(flowerAngle);   // rotation autour du centre
-    
-    
-//     // 4 Petales (coordonnées relatives au centre de la fleur)
-//     for (let i = 0; i < 5; i++) {
-//         ctx.fillStyle = "#ffd34d";
-//         const a = i * (2 * Math.PI / 5);        // // 360° / 5 = 72°
-
-//         const px = Math.cos(a) * offset;  // relatif
-//         const py = Math.sin(a) * offset;  // relatif
-        
-//         ctx.beginPath();
-//         ctx.arc(px, py, petalR, 0, Math.PI * 2);
-//         ctx.fill();
-//     }
-    
-//     // Coeur
-//     ctx.fillStyle = "#ff0000"; // jaune
-//     ctx.beginPath();
-//     ctx.arc(0, 0, centerR, 0, Math.PI * 2);
-//     ctx.fill();
-
-//     ctx.restore(); // restaure l’état du canvas (pas de rotation pour le reste)
-
-// }
-// // Animation de la fleur
-// const TAU = Math.PI * 2; // 1 tour complet
-// let speed = 0;        // tours/s au début
-// const friction = 0.95;  // ralentit: ~95%/seconde
-// let flowerAngle = 0;
-
-// function slowDownFlowerRotation() {
-//     speed *= friction;
-//     return flowerAngle = (flowerAngle + TAU * speed / 60) % TAU;
-// }
+// key controls direction //
+direction = keyControlsConfig(window, direction);
 
 
 function updateGame() {
@@ -223,13 +159,6 @@ function displayScore() {
 }
 
 
-// button sounds
-buttons.forEach(button => {
-    button.addEventListener('click', () => {
-        activateButtonSound();
-    });
-});
-
 // Game over
 function gameOver() {
     gameOverAudiosound();
@@ -241,27 +170,6 @@ function gameOver() {
     ctx.textBaseline = "middle";
     ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
 }
-
-
-// Difficulty choice
-btnSpeedChoice.forEach (btn => {
-    btn.addEventListener("click", () => {
-        buttons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        gameSpeed = btn.dataset.speed, 10;
-        console.log(gameSpeed);
-    });
-});
-
-
-// start game
-btnStart.addEventListener("click", () => {
-    direction.x = 1;
-    direction.y = 0;
-    if(gameLoop == null) {
-        gameLoop = setInterval(updateGame, gameSpeed);
-    } 
-});
 
 
 // reset game to initial state and stop actual game
@@ -291,15 +199,112 @@ function resetGameToInitialState() {
 }
 
 
-// Replay game - reset the game at initial state
-btnReplay.addEventListener("click", () => {
-    resetGameToInitialState();
-});
+// // UTILS //
+// // Positionnement aléatoire dans grille
+// function randomCellPosition(max) {
+//     totalGrids = max / GRID_SIZE;
+//     return Math.floor(Math.random() * totalGrids);
+// }
+
+// // Convertir coordonnée de grille en pixel (centré dans la case)
+// function cellToPx(cellIndex) {
+//     return (cellIndex + 0.5) * GRID_SIZE;
+// }
 
 
-direction = keyControlsConfig(window, direction);
+// // SNAKE DESIGN //
+// // rectangle with border radius
+// function roundedRect(ctx, x, y, width, height, radius, color) {
+//     ctx.beginPath();
+//     ctx.moveTo(x, y + radius);
+//     ctx.arcTo(x, y + height, x + radius, y + height, radius);
+//     ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+//     ctx.arcTo(x + width, y, x + width - radius, y, radius);
+//     ctx.arcTo(x, y, x, y + radius, radius);
+//     ctx.closePath();
+//     ctx.fillStyle = color;
+//     ctx.fill();
+// }
 
-// // key controls config
+
+// // draw snake elements
+// function drawSnake() {
+//     snakeItemsPos.forEach((segment, idx) => {
+//         if(idx === 0) {
+//             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "green");
+//         } else {
+//             roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "blue");
+//         }
+//     })
+// }
+
+
+
+// FLOWER DESIGN //
+// function setNewGridFlowerPosition() {
+//     // Random positon of Flower (en pixel)
+//     flowerGridPosition = {
+//         x: randomCellPosition(canvas.width),
+//         y: randomCellPosition(canvas.height)
+//     };
+
+//     // Donne un boost de vitesse à la nouvelle fleur
+//     speed = 3; // tours par seconde au départ
+// }
+
+// // draw Flower
+// function drawFlower() {
+//     // Diamètre < 20px (taille d'une cellule)
+//     const petalR = 4;   // rayon d'un pétale en px
+//     const centerR = 3;  // rayon du cœur
+//     const offset = 5;  // distance du centre vers chaque pétale
+  
+//     // position du centre de la fleur (en pixel)
+//     const px = cellToPx(flowerGridPosition.x);
+//     const py = cellToPx(flowerGridPosition.y);
+
+//     // Pour l'animation de la fleur
+//     ctx.save();                // sauve l’état actuel du canvas
+//     ctx.translate(px, py);       // déplace le point d’origine au centre de la fleur
+//     ctx.rotate(flowerAngle);   // rotation autour du centre
+    
+    
+//     // 4 Petales (coordonnées relatives au centre de la fleur)
+//     for (let i = 0; i < 5; i++) {
+//         ctx.fillStyle = "#ffd34d";
+//         const a = i * (2 * Math.PI / 5);        // // 360° / 5 = 72°
+
+//         const px = Math.cos(a) * offset;  // relatif
+//         const py = Math.sin(a) * offset;  // relatif
+        
+//         ctx.beginPath();
+//         ctx.arc(px, py, petalR, 0, Math.PI * 2);
+//         ctx.fill();
+//     }
+    
+//     // Coeur
+//     ctx.fillStyle = "#ff0000"; // jaune
+//     ctx.beginPath();
+//     ctx.arc(0, 0, centerR, 0, Math.PI * 2);
+//     ctx.fill();
+
+//     ctx.restore(); // restaure l’état du canvas (pas de rotation pour le reste)
+
+// }
+// // Animation de la fleur
+// const TAU = Math.PI * 2; // 1 tour complet
+// let speed = 0;        // tours/s au début
+// const friction = 0.95;  // ralentit: ~95%/seconde
+// let flowerAngle = 0;
+
+// function slowDownFlowerRotation() {
+//     speed *= friction;
+//     return flowerAngle = (flowerAngle + TAU * speed / 60) % TAU;
+// }
+
+
+
+// // KEY CONTROLS CONFIG //
 // // event listener keyboard
 // window.addEventListener(
 //   "keydown",
@@ -349,7 +354,7 @@ direction = keyControlsConfig(window, direction);
 // );
 
 
-// // sound design //
+// // SOUND DESIGN //
 // function activateButtonSound() {
 
 //     if (typeof audioCtx === 'undefined') {
