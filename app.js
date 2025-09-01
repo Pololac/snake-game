@@ -164,12 +164,10 @@ function updateGame() {
     // check if head position is on the food
     if(snakeItemsPos[0].x === flowerGridPosition.x && snakeItemsPos[0].y === flowerGridPosition.y) {
         isEating = true;
+        snakeEatingAudiosound();
         updateScore();
         setNewGridFlowerPosition();
         drawFlower();
-        snakeEatingAudiosound();
-        console.log("updateGame : " + score);
-
     }
 
     // add new head and remove last element
@@ -403,7 +401,7 @@ function snakeEatingAudiosound() {
           oscillator.frequency.setValueAtTime(500, window.audioCtx.currentTime);
           oscillator.frequency.exponentialRampToValueAtTime(700, window.audioCtx.currentTime + 0.1);
           
-          gainNode.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
+          gainNode.gain.setValueAtTime(0.01, window.audioCtx.currentTime);
           gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
           
           oscillator.connect(gainNode);
