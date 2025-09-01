@@ -1,3 +1,5 @@
+[![made-with-javascript](https://img.shields.io/badge/Made%20with-JavaScript-1f425f.svg)](https://www.javascript.com)
+
 # Snake game
 
 Snake game coded in vanilla JS with keyboard controls and retro graming design. 
@@ -18,14 +20,19 @@ You can reset the game by clicking on "replay"
 
 ### Conception
 
-Canvas : grid
-Snake 
-Flower
+First steps
+What is a snake game 
+Discovery of Canvas API
+
+Canvas : grid  
+Snake : position of all the elements composing the snake in an array 
+Flower : initialy a simple square 
 
 
 GameStart
 GameLoop : RefreshAnimationFrame, setInterval 
-UpdateGame
+UpdateGame : snake moving, eating food
+GameEnding : collision on the borders, or snake eating itself 
 
 
 #### Design UI/UX
@@ -44,7 +51,6 @@ Web Audio API
 
 Modules
 Class Game
-
 
 
 
