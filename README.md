@@ -18,11 +18,32 @@ You can reset the game by clicking on "replay"
 
 ### Conception
 
+Canvas : grid
+Snake 
+Flower
 
 
-#### 
+GameStart
+GameLoop : RefreshAnimationFrame, setInterval 
+UpdateGame
 
 
+#### Design UI/UX
+
+Pixel Legends Showcase
+https://www.subframe.com/tips/css-pixel-art-examples
+
+
+##### Sound design
+
+Web Audio API
+
+
+
+##### Refactoring
+
+Modules
+Class Game
 
 
 

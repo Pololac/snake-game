@@ -1,18 +1,20 @@
+import {Game} from "./Game.js";
 import {drawSnake} from "./snakeDesign.js";
 import {GRID_SIZE, RECT_RADIUS} from "./constants.js";
 import {setNewGridFlowerPosition, drawFlower, slowDownFlowerRotation, reinitializeSpeedFlowerRotation} from "./flowerDesign.js";
-import { activateButtonSound, gameOverAudiosound, snakeEatingAudiosound, snakeMovingAudiosound } from "./soundDesign.js";
-import { keyControlsConfig } from "./keyControlsConfig.js";
+import {activateButtonSound, gameOverAudiosound, snakeEatingAudiosound, snakeMovingAudiosound} from "./soundDesign.js";
+import {keyControlsConfig} from "./keyControlsConfig.js";
+
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const scoreDisplay = document.getElementById("score");
 
 const buttons = document.querySelectorAll("button");
 const btnStart = document.getElementById("btn-start");
 const btnReplay = document.getElementById("btn-replay");
 const btnSpeedChoice = document.querySelectorAll("#speed-buttons button");
 
-const scoreDisplay = document.getElementById("score");
-
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
 
 //const GRID_SIZE = 20;
 canvas.width = 30 * GRID_SIZE;
@@ -36,12 +38,14 @@ let direction = { x: 0, y: 0};
 
 
 // snake positions
-let snakeItemsPos = [
-    { x: 14, y: 10 },  // head
-    { x: 13, y: 10 },  // segments...
-    { x: 12, y: 10 },
-    { x: 11, y: 10 }
-];
+// let snakeItemsPos = [
+//     { x: 14, y: 10 },  // head
+//     { x: 13, y: 10 },  // segments...
+//     { x: 12, y: 10 },
+//     { x: 11, y: 10 }
+// ];
+const game = new Game();
+console.log(game.snakeItemsPos);
 
 // flower position 
 let flowerGridPosition = setNewGridFlowerPosition(canvas);
@@ -53,12 +57,8 @@ drawFlower(ctx, flowerGridPosition, flowerAngle);
 displayScore();
 
 
-// button events //
 
-// Replay game - reset the game at initial state
-btnReplay.addEventListener("click", () => {
-    resetGameToInitialState();
-});
+// button events //
 
 // Difficulty choice
 btnSpeedChoice.forEach (btn => {
@@ -66,20 +66,18 @@ btnSpeedChoice.forEach (btn => {
         buttons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         gameSpeed = btn.dataset.speed, 10;
-        console.log(gameSpeed);
     });
 });
 
-
 // start game
 btnStart.addEventListener("click", () => {
-    direction.x = 1;
-    direction.y = 0;
-    if(gameLoop == null) {
-        gameLoop = setInterval(updateGame, gameSpeed);
-    } 
+   startGame();
 });
 
+// Replay game - reset the game at initial state
+btnReplay.addEventListener("click", () => {
+    resetGameToInitialState();
+});
 
 // button sounds
 buttons.forEach(button => {
@@ -93,6 +91,15 @@ buttons.forEach(button => {
 direction = keyControlsConfig(window, direction);
 
 
+// start a new game
+function startGame(gameSpeed) {
+    direction= {x:1, y:0};
+    if(gameLoop == null) {
+        gameLoop = setInterval(updateGame, gameSpeed);
+    } 
+}
+
+// update game loop
 function updateGame() {
     let isEating = false;
 
@@ -158,7 +165,6 @@ function displayScore() {
     return scoreDisplay.innerText = `Score : ${score}`;
 }
 
-
 // Game over
 function gameOver() {
     gameOverAudiosound();
@@ -170,7 +176,6 @@ function gameOver() {
     ctx.textBaseline = "middle";
     ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
 }
-
 
 // reset game to initial state and stop actual game
 function resetGameToInitialState() {
