@@ -210,7 +210,7 @@ function gameOver() {
     gameOverAudiosound();
     clearInterval(gameLoop);
 
-    ctx.fillStyle = "rgb(0 0 0)"
+    ctx.fillStyle = "#ffffff"
     ctx.font = "48px sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
