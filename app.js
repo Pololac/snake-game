@@ -226,6 +226,22 @@ btnStart.addEventListener("click", () => {
 // Replay game
 btnReplay.addEventListener("click", () => {
 
+    clearInterval(gameLoop);
+    score = 0;
+    gameSpeed = 400;
+    ctx.fillText(" ", canvas.width / 2, canvas.height / 2);
+
+    snakeItemsPos = [];
+    snakeItemsPos = [
+        { x: 14, y: 10 },  
+        { x: 13, y: 10 },  
+        { x: 12, y: 10 },
+        { x: 11, y: 10 }
+    ];
+    console.log(snakeItemsPos);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawSnake();
+    drawFlower();
 
 });
 
