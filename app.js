@@ -18,7 +18,7 @@ let maxY = canvas.height/GRID_SIZE;
 const RECT_RADIUS = 4;
 
 // game speed
-let gameSpeed = 400;
+let gameSpeed = 300;
 
 // score
 let score = 0;
