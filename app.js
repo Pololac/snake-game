@@ -44,7 +44,6 @@ let snakeItemsPos = [
 ];
 
 
-
 // initialize direction
 let xDir = 0;
 let yDir = 0;
@@ -70,20 +69,24 @@ function randomCellPosition(max) {
 // Convertir coordonnée de grille en pixel (centré dans la case)
 function cellToPx(cellIndex) {
     return (cellIndex + 0.5) * GRID_SIZE;
-  }
+}
 
-let flowerGridPosition = {};
+let flowerGridPosition = { x: 0, y: 0 };
 
 function setNewGridFlowerPosition() {
     // Random positon of Flower (en pixel)
-    flowerGridPosition = {x: randomCellPosition(canvas.width), y: randomCellPosition(canvas.height)};
-    console.log(flowerGridPosition);
-    return flowerGridPosition;
+    flowerGridPosition = {
+        x: randomCellPosition(canvas.width),
+        y: randomCellPosition(canvas.height)
+    };
+
+    // Donne un boost de vitesse à la nouvelle fleur
+    speed = 3; // tours par seconde au départ
 }
 
 let flowerAngle = 0;
 
-// draw snake food
+// draw Flower
 function drawFlower() {
     // Diamètre < 20px (taille d'une cellule)
     const petalR = 4;   // rayon d'un pétale en px
@@ -91,20 +94,22 @@ function drawFlower() {
     const offset = 5;  // distance du centre vers chaque pétale
   
     // position du centre de la fleur (en pixel)
-    let flowerPixelPosition = {x: cellToPx(flowerGridPosition.x), y: cellToPx(flowerGridPosition.y)};
-    console.log(flowerPixelPosition);
+    const px = cellToPx(flowerGridPosition.x);
+    const py = cellToPx(flowerGridPosition.y);
 
     // Pour l'animation de la fleur
     ctx.save();                // sauve l’état actuel du canvas
-    ctx.translate(flowerPixelPosition.x, flowerPixelPosition.y);       // déplace le point d’origine au centre de la fleur
-    ctx.rotate(flowerAngle);   // applique une rotation autour du centre
+    ctx.translate(px, py);       // déplace le point d’origine au centre de la fleur
+    ctx.rotate(flowerAngle);   // rotation autour du centre
     
-    // Petales (4 petits cercles autour du centre)
-    for (let i = 0; i < 4; i++) {
-        ctx.fillStyle = "#000";
-        const angle = (i * 2 * Math.PI) / 4;
-        const px = flowerPixelPosition.x + Math.cos(angle) * offset;
-        const py = flowerPixelPosition.y + Math.sin(angle) * offset;
+    
+    // 4 Petales (coordonnées relatives au centre de la fleur)
+    for (let i = 0; i < 5; i++) {
+        ctx.fillStyle = "#ffd34d";
+        const a = i * (2 * Math.PI / 5);        // // 360° / 5 = 72°
+
+        const px = Math.cos(a) * offset;  // relatif
+        const py = Math.sin(a) * offset;  // relatif
         
         ctx.beginPath();
         ctx.arc(px, py, petalR, 0, Math.PI * 2);
@@ -112,22 +117,22 @@ function drawFlower() {
     }
     
     // Coeur
-    ctx.fillStyle = "#ffd34d"; // jaune
-
+    ctx.fillStyle = "#ff0000"; // jaune
     ctx.beginPath();
-    ctx.arc(flowerPixelPosition.x, flowerPixelPosition.y, centerR, 0, Math.PI * 2);
+    ctx.arc(0, 0, centerR, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.restore(); // restaure l’état du canvas (pas de rotation pour le reste)
 
 }
 
-// --- Boucle d’animation ---
-function animateFlower() {
-    flowerAngle += 0.02; // incrémente l’angle pour faire tourner
-}
+    // Animation de la fleur
+    const TAU = Math.PI * 2; // 1 tour complet
+    let speed = 0;        // tours/s au début
+    const friction = 0.95;  // ralentit: ~95%/seconde
 
- 
+
+
 function updateGame() {
     let isEating = false;
 
@@ -169,13 +174,16 @@ function updateGame() {
     }
 
     displayScore();
+    // ctx.fillStyle = "rgb(255 255 255 / 80%)";
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "rgb(255 255 255 / 80%)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawSnake();
+    // Animation de la fleur
+    speed *= friction;
+    flowerAngle = (flowerAngle + TAU * speed / 60) % TAU;
     drawFlower();
-    //animateFlower();
 
+    drawSnake();
 }
 
 // Update score
@@ -294,9 +302,8 @@ window.addEventListener(
 );
 
 
-
 displayScore();
 drawSnake();
-setNewGridFlowerPosition()
+setNewGridFlowerPosition();
 drawFlower();
 
