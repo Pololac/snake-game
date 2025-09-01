@@ -67,7 +67,7 @@ function drawSnake() {
 
 // Positionnement aléatoire dans grille
 function randomCellPosition(max) {
-    totalGrids = max / GRID_SIZE;
+    const totalGrids = max / GRID_SIZE;
     return Math.floor(Math.random() * totalGrids);
 }
 
