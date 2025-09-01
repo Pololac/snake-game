@@ -1,8 +1,6 @@
 [![made-with-javascript](https://img.shields.io/badge/Made%20with-JavaScript-1f425f.svg)](https://www.javascript.com)
 
-# Snake game
-
-:snake:
+# :snake: Snake game
 
 Snake game coded in vanilla JS with keyboard controls and retro graming design.
 
