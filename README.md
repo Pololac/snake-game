@@ -8,9 +8,7 @@ We used canvas API for the animations and web audio API both provided by javascr
 
 Coded by Paul & Patrick
 
-# Play the game
-
-:video_game:
+# :video_game: Play the game
 
 Choose a difficulty and click on "start"
 
@@ -18,9 +16,7 @@ Use the arrow key directions on your keyboard to move the snake and eat the flow
 
 You can reset the game by clicking on "replay"
 
-# Conception
-
-:bulb:
+# :bulb: Conception
 
 ## First steps
 
@@ -47,25 +43,18 @@ UpdateGame : snake moving, eating food
 GameEnding : collision on the borders, or snake eating itself
 
 
-# Design UI/UX
-
-:art:
+# :art: Design UI/UX
 
 [Subframe - Pixel Legends Showcase]
 (https://www.subframe.com/tips/css-pixel-art-examples)
 
 Inspiration by the design to create our interface with retro pixel design and audio sound. 
 
-# Sound design
-
-:sound:
+# :sound: Sound design
 
 Using Web Audio API and examples from Subframe
 
-# Refactoring
-
-:computer:
+# :computer: Refactoring
 
 Modules
 Class Game
-
