@@ -1,17 +1,17 @@
 [![made-with-javascript](https://img.shields.io/badge/Made%20with-JavaScript-1f425f.svg)](https://www.javascript.com)
 
-
 # Snake game
+
 :snake:
 
-Snake game coded in vanilla JS with keyboard controls and retro graming design. 
+Snake game coded in vanilla JS with keyboard controls and retro graming design.
 
 We used canvas API for the animations and web audio API both provided by javascript
 
-Coded by Paul & Patrick 
+Coded by Paul & Patrick
 
+# Play the game
 
-## Play the game
 :video_game:
 
 Choose a difficulty and click on "start"
@@ -20,28 +20,37 @@ Use the arrow key directions on your keyboard to move the snake and eat the flow
 
 You can reset the game by clicking on "replay"
 
+# Conception
 
-### Conception
 :bulb:
 
-1. First steps
+## First steps
+
 What is a snake game? Principles
 Discovery of Canvas API
 
-2. Canvas : grid and drawing  
+## Canvas
 
-3. Snake : position of all the elements composing the snake in an array, drawing elements
+grid and drawing  
 
-4. "Food" snake (flower) : initialy a simple square 
+## Snake
 
+position of all the elements composing the snake in an array, drawing elements
+
+## Food snake
+
+(flower) : initialy a simple square
+
+## Algo
 
 GameStart
-GameLoop : RefreshAnimationFrame, setInterval 
+GameLoop : RefreshAnimationFrame, setInterval
 UpdateGame : snake moving, eating food
-GameEnding : collision on the borders, or snake eating itself 
+GameEnding : collision on the borders, or snake eating itself
 
 
-#### Design UI/UX
+# Design UI/UX
+
 :art:
 
 [Subframe - Pixel Legends Showcase]
@@ -49,20 +58,16 @@ GameEnding : collision on the borders, or snake eating itself
 
 Inspiration by the design to create our interface with retro pixel design and audio sound. 
 
+# Sound design
 
-
-##### Sound design
 :sound:
 
-Using Web Audio API and examples from Subframe 
+Using Web Audio API and examples from Subframe
 
+# Refactoring
 
-
-##### Refactoring
 :computer:
 
 Modules
 Class Game
-
-
 
