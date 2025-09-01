@@ -1,7 +1,8 @@
 
+const buttons = document.querySelectorAll("button");
 const btnStart = document.getElementById("btn-start");
 const btnReplay = document.getElementById("btn-replay");
-const buttons = document.querySelectorAll("#speed-buttons button");
+const btnSpeedChoice = document.querySelectorAll("#speed-buttons button");
 
 const scoreDisplay = document.getElementById("score");
 
@@ -21,6 +22,10 @@ let gameSpeed = 400;
 
 // score
 let score = 0;
+
+// declare gameLoop for interval id
+let gameLoop;
+
 
 // rectangle with border radius
 function roundedRect(ctx, x, y, width, height, radius, color) {
@@ -143,7 +148,7 @@ function updateGame() {
         return;
     }
 
-    // check if snake head don't touche snake body
+    // check if snake head don't touch snake body
     for(let i = 1; i < snakeItemsPos.length; i++) {
         if(head.x === snakeItemsPos[i].x && head.y === snakeItemsPos[i].y) {
             gameOver();
@@ -157,7 +162,9 @@ function updateGame() {
         updateScore();
         setNewGridFlowerPosition();
         drawFlower();
+        snakeEatingAudiosound();
         console.log("updateGame : " + score);
+
     }
 
     // add new head and remove last element
@@ -167,6 +174,8 @@ function updateGame() {
     if(isEating === false) {
         snakeItemsPos.pop();
     }
+
+    snakeMovingAudiosound();
 
     displayScore();
 
@@ -190,6 +199,7 @@ function displayScore() {
 
 // Game over
 function gameOver() {
+    gameOverAudiosound();
     clearInterval(gameLoop);
 
     ctx.fillStyle = "rgb(0 0 0)"
@@ -201,47 +211,57 @@ function gameOver() {
 
 
 // Difficulty choice
-buttons.forEach (btn => {
+btnSpeedChoice.forEach (btn => {
     btn.addEventListener("click", () => {
         buttons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        parseInt(btn.dataset.speed, 10);
+        gameSpeed = btn.dataset.speed, 10;
+        console.log(gameSpeed);
     });
 });
 
 
-// declare gameLoop for interval id
-let gameLoop;
-
-// start new game
+// start game
 btnStart.addEventListener("click", () => {
     xDir = 1;
     yDir = 0;
-    
-    gameLoop = setInterval(updateGame, gameSpeed);
+    console.log(gameLoop);
+    if(gameLoop == null) {
+        gameLoop = setInterval(updateGame, gameSpeed);
+    } 
 });
 
-// TO DO
-// Replay game
-btnReplay.addEventListener("click", () => {
 
+// reset game to initial state and stop actual game
+function resetGameToInitialState() {
+
+    // stop and reset gameLoop
     clearInterval(gameLoop);
+    gameLoop = null;
+    // reset score
     score = 0;
-    gameSpeed = 400;
-    ctx.fillText(" ", canvas.width / 2, canvas.height / 2);
-
-    snakeItemsPos = [];
+    // reset draw context
+    ctx.reset();
+    
+    // reset snake position
     snakeItemsPos = [
         { x: 14, y: 10 },  
         { x: 13, y: 10 },  
         { x: 12, y: 10 },
         { x: 11, y: 10 }
     ];
-    console.log(snakeItemsPos);
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // draw new snake and flower with new position
     drawSnake();
+    setNewGridFlowerPosition()
     drawFlower();
 
+}
+
+
+// Replay game - reset the game at initial state
+btnReplay.addEventListener("click", () => {
+    resetGameToInitialState();
 });
 
 // event listener keyboard
@@ -300,3 +320,117 @@ drawSnake();
 setNewGridFlowerPosition()
 drawFlower();
 
+
+// audio animation //
+
+// buttons
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+    if (typeof audioCtx === 'undefined') {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        window.audioCtx = new AudioContext();
+    }
+    
+    if (window.audioCtx) {
+        const oscillator = window.audioCtx.createOscillator();
+        const gainNode = window.audioCtx.createGain();
+        
+        oscillator.type = 'square';
+        oscillator.frequency.setValueAtTime(200, window.audioCtx.currentTime);
+        oscillator.frequency.setValueAtTime(150, window.audioCtx.currentTime + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.1, window.audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.2);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(window.audioCtx.destination);
+        
+        oscillator.start();
+        oscillator.stop(window.audioCtx.currentTime + 0.2);
+    }
+    });
+});
+
+
+// snake moving audiosound
+function snakeMovingAudiosound() {
+
+    if (typeof audioCtx === 'undefined') {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          window.audioCtx = new AudioContext();
+        }
+        
+        if (window.audioCtx) {
+          const oscillator = window.audioCtx.createOscillator();
+          const gainNode = window.audioCtx.createGain();
+          
+          oscillator.type = 'square';
+          oscillator.frequency.setValueAtTime(100, window.audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(300, window.audioCtx.currentTime + 0.1);
+          
+          gainNode.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(window.audioCtx.destination);
+          
+          oscillator.start();
+          oscillator.stop(window.audioCtx.currentTime + 0.1);
+    }
+}
+
+
+// snake eating audiosound
+function snakeEatingAudiosound() {
+
+    if (typeof audioCtx === 'undefined') {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          window.audioCtx = new AudioContext();
+        }
+        
+        if (window.audioCtx) {
+          const oscillator = window.audioCtx.createOscillator();
+          const gainNode = window.audioCtx.createGain();
+          
+          oscillator.type = 'square';
+          oscillator.frequency.setValueAtTime(500, window.audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(700, window.audioCtx.currentTime + 0.1);
+          
+          gainNode.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(window.audioCtx.destination);
+          
+          oscillator.start();
+          oscillator.stop(window.audioCtx.currentTime + 0.1);
+    }
+}
+    
+
+// game over audiosound
+function gameOverAudiosound() {
+
+    if (typeof audioCtx === 'undefined') {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          window.audioCtx = new AudioContext();
+        }
+        
+        if (window.audioCtx) {
+          const oscillator = window.audioCtx.createOscillator();
+          const gainNode = window.audioCtx.createGain();
+          
+          oscillator.type = 'square';
+          oscillator.frequency.setValueAtTime(1000, window.audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(100, window.audioCtx.currentTime + 0.1);
+          
+          gainNode.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(window.audioCtx.destination);
+          
+          oscillator.start();
+          oscillator.stop(window.audioCtx.currentTime + 0.1);
+    }
+}
