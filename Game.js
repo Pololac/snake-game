@@ -83,10 +83,9 @@ export class Game {
             drawFlower(ctx, this.flowerGridPosition, this.flowerAngle);
         }
     
-        // add new head and remove last element
+        // add new head and remove last element (unless it eats the flower)
         this.snakeItemsPos.unshift(head);
     
-        // if snake ate the flower, we keep the last element
         if(isEating === false) {
             this.snakeItemsPos.pop();
         }

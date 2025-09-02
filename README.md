@@ -138,10 +138,110 @@ function slowDownFlowerRotation(flowerAngle) {
 - TAU → shorthand for 2 * Math.PI (≈ 6.283), representing one full circle in radians.
 
 
-## Game (Paul)
-GameStart
-UpdateGame : snake moving, eating food
-GameEnding : collision on the borders, or snake eating itself
+## Game Logic
+### Game initialization
+- Places the first flower at a random position.
+- Resets the flower’s rotation angle.
+- Displays the initial score (set in the instance of Game class).
+- Draws the snake and the first flower on the canvas.
+
+### Game start
+Starts the game loop :
+    - Sets the initial snake direction (moving right).
+    - Launches a timed loop (setInterval) that repeatedly calls updateGame() at the given speed.
+    - Prevents multiple loops from being started at once.  
+    NB: we save the `intervalID` here so that we could end the loop later.
+
+```javascript
+start(gameSpeed, canvas, ctx, scoreDiv) {
+    if(this.intervalID !== null) return;
+
+    this.direction = { x: 1, y: 0 };
+
+    this.intervalID = setInterval(() => this.updateGame(canvas, ctx, scoreDiv), gameSpeed);
+    
+}
+```
+
+### Game update
+Updates the game state at each tick of the loop.
+- Moves the snake by creating a new head in the current direction.
+```js
+const head = {
+    x: this.snakeItemsPos[0].x + this.direction.x,
+    y: this.snakeItemsPos[0].y + this.direction.y
+}
+```
+- Checks for collisions with the walls or the snake’s own body → triggers `gameOver` function if detected.
+```js
+// check if head don't touch borders
+if (head.x >= xCells || head.x < 0 || head.y >= yCells || head.y < 0){
+    this.gameOver(ctx);
+    return;
+}
+
+// check if snake head don't touch snake body
+for(let i = 1; i < this.snakeItemsPos.length; i++) {
+    if(head.x === this.snakeItemsPos[i].x && head.y === this.snakeItemsPos[i].y) {
+        this.gameOver(ctx);
+        return;
+    }
+}
+```
+
+- Checks if the snake eats the flower:
+  - Set the variable `isEating` to `true` (used to draw the "new" snake)
+  - Plays the eating sound.
+  - Increases and displays the score.
+  - Spawns a new flower at a random position and resets its rotation speed.
+```js
+if(head.x === this.flowerGridPosition.x && head.y === this.flowerGridPosition.y) {
+    isEating = true;
+    snakeEatingAudiosound();
+    this.updateScore();
+    this.displayScore(scoreDiv);
+
+    reinitializeSpeedFlowerRotation();
+    this.flowerGridPosition = setNewGridFlowerPosition(canvas);
+    drawFlower(ctx, this.flowerGridPosition, this.flowerAngle);
+}
+```
+
+- Updates the snake’s body: keeps the new head and removes the tail (unless the snake has just eaten the flower).
+```js
+// add new head and remove last element (unless it eats the flower)
+this.snakeItemsPos.unshift(head);
+
+if(isEating === false) {
+    this.snakeItemsPos.pop();
+}
+```
+Plays the moving sound.
+
+- Clears the canvas and redraws a "new" scene:
+  - Updates the flower’s rotation with friction.
+  - Renders the flower and the snake in their new positions.
+
+
+### GameOver
+Ends the current game session : 
+- Plays the game over sound effect.
+- Stops the game loop by clearing the active interval.
+- Displays a “Game Over” message centered on the canvas.
+
+```js
+gameOver(ctx) {
+    gameOverAudiosound();
+    clearInterval(this.intervalID);
+    this.intervalID = null;
+
+    ctx.fillStyle = "#ffffff"
+    ctx.font = "48px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+}
+```
 
 
 ## :art: Design UI/UX (Patrick)
@@ -156,9 +256,13 @@ Inspiration by the design to create our interface with retro pixel design and au
 Using Web Audio API and examples from Subframe
 
 ## :computer: Refactoring (Patrick : modules, Paul : class)
+### ES Modules
 
-Modules
-Class Game
+
+
+### The Game class
+
+
 
 
 ## 👨‍💻 Authors
