@@ -261,9 +261,18 @@ Using Web Audio API and examples from Subframe
 
 
 ### The Game class
+The Game class is the central component that manages the snake’s state, the flower, the score, and the game loop.
+It exposes methods such as init(), start(), updateGame(), and gameOver() to handle the different stages of a game session.
 
-
-
+To use the class in `app.js`, create a new Game instance when the page loads:
+```js
+let game = new Game();
+```
+You can then call its methods in the file, for example:
+```js
+game.init(canvas, ctx, scoreDiv);
+```
+Make sure to pass the parameters (for example `canvas`, `ctx` or `scoreDiv`) that are set up in `app.js`, so they can be used inside the Game class for rendering and score display.
 
 ## 👨‍💻 Authors
 Coded by @Pololac & @PatrickLaubscher.
