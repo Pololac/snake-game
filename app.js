@@ -1,8 +1,8 @@
 import {Game} from "./Game.js";
 import {drawSnake} from "./snakeDesign.js";
-import {GRID_SIZE, RECT_RADIUS, SNAKE_INIT} from "./config.js";
+import {GRID_SIZE, maxX, maxY, RECT_RADIUS} from "./config.js";
 import {setNewGridFlowerPosition, drawFlower, slowDownFlowerRotation, reinitializeSpeedFlowerRotation} from "./flowerDesign.js";
-import {activateButtonSound, gameOverAudiosound, snakeEatingAudiosound, snakeMovingAudiosound} from "./soundDesign.js";
+import {activateButtonSound} from "./soundDesign.js";
 import {handleKeyDown} from "./keyControlsConfig.js";
 
 
@@ -17,10 +17,10 @@ const btnSpeedChoice = document.querySelectorAll("#speed-buttons button");
 
 
 //const GRID_SIZE = 20;
-canvas.width = 30 * GRID_SIZE;
-canvas.height = 20 * GRID_SIZE;
-let maxX = canvas.width/GRID_SIZE;
-let maxY = canvas.height/GRID_SIZE;
+canvas.width = maxX * GRID_SIZE;
+canvas.height = maxY * GRID_SIZE;
+// let maxX = canvas.width/GRID_SIZE;
+// let maxY = canvas.height/GRID_SIZE;
 
 
 //const RECT_RADIUS = 4;
@@ -46,7 +46,6 @@ console.log(game);
 let gameSpeed = game.gameSpeed;
 
 game.init(canvas, ctx);
-
 displayScore();
 
 // // flower position 
@@ -72,12 +71,14 @@ btnSpeedChoice.forEach (btn => {
         buttons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         gameSpeed = btn.dataset.speed, 10;
+        console.log(gameSpeed);
     });
 });
 
 // start game
 btnStart.addEventListener("click", () => {
-   game.start(gameSpeed);
+    console.log("Btn Start clicked");
+   game.start(gameSpeed, canvas, ctx);
 });
 
 // Replay game - reset the game at initial state
@@ -92,12 +93,10 @@ buttons.forEach(button => {
     });
 });
 
-console.log(direction);
 
 // key controls direction //
 window.addEventListener("keydown", (event) => direction = handleKeyDown(event, direction), true);
 
-console.log(direction);
 
 // start a new game
 // function start(gameSpeed) {
@@ -108,60 +107,60 @@ console.log(direction);
 // }
 
 // update game loop
-function updateGame() {
-    let isEating = false;
+// function updateGame() {
+//     let isEating = false;
 
-    // create new head
-    const head = {
-        x: snakeItemsPos[0].x + direction.x,
-        y: snakeItemsPos[0].y + direction.y
-    }
+//     // create new head
+//     const head = {
+//         x: snakeItemsPos[0].x + direction.x,
+//         y: snakeItemsPos[0].y + direction.y
+//     }
 
-    // check if head don't touch borders
-    if (head.x >= maxX || head.x < 0 || head.y >= maxY || head.y < 0){
-        gameOver();
-        return;
-    }
+//     // check if head don't touch borders
+//     if (head.x >= maxX || head.x < 0 || head.y >= maxY || head.y < 0){
+//         gameOver();
+//         return;
+//     }
 
-    // check if snake head don't touch snake body
-    for(let i = 1; i < snakeItemsPos.length; i++) {
-        if(head.x === snakeItemsPos[i].x && head.y === snakeItemsPos[i].y) {
-            gameOver();
-            return;
-        }
-    }
+//     // check if snake head don't touch snake body
+//     for(let i = 1; i < snakeItemsPos.length; i++) {
+//         if(head.x === snakeItemsPos[i].x && head.y === snakeItemsPos[i].y) {
+//             gameOver();
+//             return;
+//         }
+//     }
 
-    // check if head position is on the food
-    if(snakeItemsPos[0].x === flowerGridPosition.x && snakeItemsPos[0].y === flowerGridPosition.y) {
-        isEating = true;
-        snakeEatingAudiosound();
-        updateScore();
-        reinitializeSpeedFlowerRotation();
-        flowerGridPosition = setNewGridFlowerPosition(canvas);
-        drawFlower(ctx, flowerGridPosition, flowerAngle);
-    }
+//     // check if head position is on the food
+//     if(snakeItemsPos[0].x === flowerGridPosition.x && snakeItemsPos[0].y === flowerGridPosition.y) {
+//         isEating = true;
+//         snakeEatingAudiosound();
+//         updateScore();
+//         reinitializeSpeedFlowerRotation();
+//         flowerGridPosition = setNewGridFlowerPosition(canvas);
+//         drawFlower(ctx, flowerGridPosition, flowerAngle);
+//     }
 
-    // add new head and remove last element
-    snakeItemsPos.unshift(head);
+//     // add new head and remove last element
+//     snakeItemsPos.unshift(head);
 
-    // if isEating we keep the last element
-    if(isEating === false) {
-        snakeItemsPos.pop();
-    }
+//     // if isEating we keep the last element
+//     if(isEating === false) {
+//         snakeItemsPos.pop();
+//     }
 
-    snakeMovingAudiosound();
+//     snakeMovingAudiosound();
 
-    displayScore();
-    // ctx.fillStyle = "rgb(255 255 255 / 80%)";
-    // ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+//     displayScore();
+//     // ctx.fillStyle = "rgb(255 255 255 / 80%)";
+//     // ctx.fillRect(0, 0, canvas.width, canvas.height);
+//     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Animation de la fleur
-    flowerAngle = slowDownFlowerRotation(flowerAngle);
+//     // Animation de la fleur
+//     flowerAngle = slowDownFlowerRotation(flowerAngle);
 
-    drawFlower(ctx, flowerGridPosition, flowerAngle);
-    drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS);
-}
+//     drawFlower(ctx, flowerGridPosition, flowerAngle);
+//     drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS);
+// }
 
 // // Update score
 // function updateScore() {
@@ -174,16 +173,16 @@ function updateGame() {
 // }
 
 // Game over
-function gameOver() {
-    gameOverAudiosound();
-    clearInterval(intervalID);
+// function gameOver() {
+//     gameOverAudiosound();
+//     clearInterval(intervalID);
 
-    ctx.fillStyle = "#ffffff"
-    ctx.font = "48px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
-}
+//     ctx.fillStyle = "#ffffff"
+//     ctx.font = "48px sans-serif";
+//     ctx.textAlign = "center";
+//     ctx.textBaseline = "middle";
+//     ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+// }
 
 // reset game to initial state and stop actual game
 function resetGameToInitialState() {
