@@ -1,7 +1,5 @@
 import {Game} from "./Game.js";
-import {drawSnake} from "./snakeDesign.js";
-import {GRID_SIZE, maxX, maxY, RECT_RADIUS} from "./config.js";
-import {setNewGridFlowerPosition, drawFlower, slowDownFlowerRotation, reinitializeSpeedFlowerRotation} from "./flowerDesign.js";
+import {GRID_SIZE, maxX, maxY} from "./config.js";
 import {activateButtonSound} from "./soundDesign.js";
 import {handleKeyDown} from "./keyControlsConfig.js";
 
@@ -19,7 +17,6 @@ canvas.width = maxX * GRID_SIZE;
 canvas.height = maxY * GRID_SIZE;
 
 let game = new Game();
-
 let gameSpeed = game.gameSpeed;
 
 game.init(canvas, ctx, scoreDiv);
@@ -31,13 +28,11 @@ btnSpeedChoice.forEach (btn => {
         buttons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         gameSpeed = btn.dataset.speed, 10;
-        console.log(gameSpeed);
     });
 });
 
 // Start game
 btnStart.addEventListener("click", () => {
-    console.log("Btn Start clicked");
    game.start(gameSpeed, canvas, ctx, scoreDiv);
 });
 
