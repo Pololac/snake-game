@@ -90,7 +90,7 @@ Preventing elements from going out of the canvas was easy, as you just have to u
 
 But in a snake game, the snake moves in a specific way: the last element takes the coordinates of the previous one. In addition, if the snake eats itself, the game is over.
 
-### grid
+### Grid
 
 Considering the collision checks we need to implement and the food design, we were advised to use a grid.
 
@@ -114,7 +114,7 @@ setInterval(() => gameLoop(), gameSpeed);
 ```
 
 
-# Snake 
+## Snake 
 
 As we will use a grid, we also have been suggested to use an array of coordinates for the snake as follow :
 
@@ -137,22 +137,22 @@ UpdateGame : snake moving, eating food
 GameEnding : collision on the borders, or snake eating itself
 
 
-## :art: Design UI/UX (Patrick)
+# :art: Design UI/UX (Patrick)
 
 [Subframe - Pixel Legends Showcase]
 (https://www.subframe.com/tips/css-pixel-art-examples)
 
 Inspiration by the design to create our interface with retro pixel design and audio sound. 
 
-## :sound: Sound design (Patrick)
+# :sound: Sound design (Patrick)
 
 Using Web Audio API and examples from Subframe
 
-## :computer: Refactoring (Patrick : modules, Paul : class)
+# :computer: Refactoring (Patrick : modules, Paul : class)
 
 Modules
 Class Game
 
 
-## 👨‍💻 Authors
+# 👨‍💻 Authors
 Coded by @Pololac & @PatrickLaubscher.
