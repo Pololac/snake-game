@@ -27,22 +27,24 @@ You can reset the game at any time by clicking on "Replay".
 - The challenge is to survive as long as possible while making the snake as long as you can.
 
 
-## API Canvas
+## :bulb: Conception
 
-### Main concepts (Patrick)
+### API Canvas
+
+#### Main concepts (Patrick)
 
 grid / drawing
 animation : RefreshAnimationFrame
 
-## Snake (Patrick)
+### Snake (Patrick)
 position of all the elements composing the snake in an array, drawing elements & animation
 
-## Food = Flower (Paul)
+### Food = Flower (Paul)
 
 To represent the food, we initially chose a simple square as the one used to create the snake body.
 But it seems more fun to have a rotating flower to symbolize the food 😅​.
 
-### Random positioning
+#### Random positioning
 To set a random (X,Y) positionning of the flower in the grid (from (0,0) to (xCells, yCells) - grid size set in config.js), we use this function on x and y coordinates : 
 ```js
 function randomCellPosition(cellsNumber) {
@@ -52,7 +54,7 @@ function randomCellPosition(cellsNumber) {
 It returns en integer between 0 and cellsNumber.
 So we got the (X,Y) coordinates of the flower in the grid, that will be used later to check if the snake's head is on the same cell as the flower.
 
-### Convert grid → pixel position to draw the flower
+#### Convert grid → pixel position to draw the flower
 The drawing in Canvas API is based on pixels. So we use a function to get the (x,y) coordinates in pixels of the center of the flower : 
 ```js
 function cellToPx(cellIndex) {
@@ -61,7 +63,7 @@ function cellToPx(cellIndex) {
 ```
 Those values are saved in constants (px, py).
 
-### Animation = Rotation with friction
+#### Animation = Rotation with friction
 To draw the flower, we have to translate the "ctx" to the flower's center.
 
 ```js
@@ -74,7 +76,7 @@ ctx.restore(); // Cancels the rotation/translation for the rest of the drawing.
 
 ```
 
-### Flower geometry
+#### Flower geometry
 The flower should be embedded in a grid's cell (diameter < 20 px). So we chose those dimensions
 ```js
 const petalR = 4;   // petal radius in px
@@ -86,7 +88,7 @@ const offset = 5;   // distance from center to each petal in px
 - Quick check to fit inside a 20 px cell: 2 x (offset + petalR) = 2 x (5 + 4) = 18 ≤ 20 px → it fits.
 
 
-### Draw the center
+#### Draw the center
 We choose 5 petals instead of 4 to make the rotation easier to see.
 ```js
 ctx.fillStyle = "#ff0000"; // center's color
@@ -98,7 +100,7 @@ The heart of the flower is a red disk at the local center (0,0), with a radius =
 ```Math.PI * 2``` = one full circle in radians (360°).
 
 
-### Draw the petals (relative coordinates to flower's center)
+#### Draw the petals (relative coordinates to flower's center)
 We choose 5 petals rather than 4 instead of 4 to make the rotation easier to see.
 ```js
 for (let i = 0; i < 5; i++) {
@@ -117,7 +119,7 @@ for (let i = 0; i < 5; i++) {
 - Petals are evenly spaced on a circle: 360° / 5 = 72°.
 - Polar → Cartesian: `x = cos(a) * radius (= offset)`.
 
-### Rotation
+#### Rotation
 The rotation, applied every time `updateGame()` is run, is based on the `flowerAngle` in radians.  
 We apply a friction factor to the rotation speed so that the spinning gradually slows down until it eventually stops.  
 
@@ -271,6 +273,9 @@ You can then call its methods in the file, for example:
 game.init(canvas, ctx, scoreDiv);
 ```
 Make sure to pass the parameters (for example `canvas`, `ctx` or `scoreDiv`) that are set up in `app.js`, so they can be used inside the Game class for rendering and score display.
+
+> ** 🎯 Why Refactor?**  
+> This process is extremely time-consuming but worth the time spent as it makes the project easier to maintain and extend.
 
 ## 👨‍💻 Authors
 Coded by @Pololac & @PatrickLaubscher.
