@@ -85,7 +85,7 @@ btnStart.addEventListener("click", () => {
 btnReplay.addEventListener("click", () => {
     game.replay(ctx);
     game = new Game();
-    game.init(canvas, ctx);
+    game.init(canvas, ctx, scoreDiv);
 });
 
 // key controls direction //
