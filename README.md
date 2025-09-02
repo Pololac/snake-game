@@ -31,22 +31,20 @@ You can reset the game at any time by clicking on "Replay".
 
 ### API Canvas
 
-#### Main concepts
+#### Main concepts (Patrick)
 
-grid and drawing  
+grid / drawing
+animation : RefreshAnimationFrame
 
-### Snake
+### Snake (Patrick)
+position of all the elements composing the snake in an array, drawing elements & animation
 
-position of all the elements composing the snake in an array, drawing elements
-
-### Food snake
+### Food = Flower (Paul)
 
 (flower) : initialy a simple square
 
-## Algo
-
+## Game (Paul)
 GameStart
-GameLoop : RefreshAnimationFrame, setInterval
 UpdateGame : snake moving, eating food
 GameEnding : collision on the borders, or snake eating itself
 
@@ -62,7 +60,7 @@ Inspiration by the design to create our interface with retro pixel design and au
 
 Using Web Audio API and examples from Subframe
 
-## :computer: Refactoring (Patrick : )
+## :computer: Refactoring (Patrick : modules, Paul : class)
 
 Modules
 Class Game
