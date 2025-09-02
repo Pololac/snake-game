@@ -5,17 +5,16 @@ import {gameOverAudiosound, snakeEatingAudiosound, snakeMovingAudiosound} from "
 
 
 export class Game {
-
     gameSpeed;
     score;
     direction;
     snakeItemsPos
     flowerGridPosition;
     flowerAngle;
-    intervalID;   // ID utilisé dans le setInterval
+    intervalID;   // ID used in setInterval
     
     constructor() {
-        this.snakeItemsPos = SNAKE_INIT.map(segment => ({...segment})); // Création d'une copie pour ne pas muter le tableau original
+        this.snakeItemsPos = SNAKE_INIT.map(segment => ({...segment})); // Creating a copy so as not to mutate the original table
         this.gameSpeed = SPEED_DEFAULT;
         this.score = 0;
         this.direction = { x: 0, y: 0};
@@ -49,7 +48,6 @@ export class Game {
         }
     }
 
-
     updateGame(canvas, ctx, scoreDiv) {
         let isEating = false;
     
@@ -73,7 +71,7 @@ export class Game {
             }
         }
     
-        // check if head position is on the food
+        // check if head position is on the flower
         if(head.x === this.flowerGridPosition.x && head.y === this.flowerGridPosition.y) {
             isEating = true;
             snakeEatingAudiosound();
@@ -88,28 +86,21 @@ export class Game {
         // add new head and remove last element
         this.snakeItemsPos.unshift(head);
     
-        // if isEating we keep the last element
+        // if snake ate the flower, we keep the last element
         if(isEating === false) {
             this.snakeItemsPos.pop();
         }
     
         snakeMovingAudiosound();
     
-        // ctx.fillStyle = "rgb(255 255 255 / 80%)";
-        // ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-        // Animation de la fleur
+        // Rotate the flower
         this.flowerAngle = slowDownFlowerRotation(this.flowerAngle);
     
         drawFlower(ctx, this.flowerGridPosition, this.flowerAngle);
         drawSnake(ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
-        console.log(SNAKE_INIT);
     }
     
-
-
-    // Update score
     updateScore() {
         this.score += 1;
     }
