@@ -1,6 +1,6 @@
 import {SNAKE_INIT, SPEED_DEFAULT, GRID_SIZE, maxX, maxY, RECT_RADIUS} from "./config.js";
 import { drawSnake } from "./snakeDesign.js";
-import { drawFlower, setNewGridFlowerPosition, slowDownFlowerRotation } from "./flowerDesign.js";
+import { drawFlower, setNewGridFlowerPosition, slowDownFlowerRotation, reinitializeSpeedFlowerRotation } from "./flowerDesign.js";
 import {gameOverAudiosound, snakeEatingAudiosound, snakeMovingAudiosound} from "./soundDesign.js";
 
 
@@ -15,7 +15,7 @@ export class Game {
     intervalID;   // ID utilisé dans le setInterval
     
     constructor() {
-        this.snakeItemsPos = SNAKE_INIT.map(p => ({...p})); // Création d'une copie pour ne pas muter le tableau original
+        this.snakeItemsPos = SNAKE_INIT.map(segment => ({...segment})); // Création d'une copie pour ne pas muter le tableau original
         this.gameSpeed = SPEED_DEFAULT;
         this.score = 0;
         this.direction = { x: 0, y: 0};
@@ -29,20 +29,14 @@ export class Game {
         
         drawSnake(ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
         drawFlower(ctx, this.flowerGridPosition, this.flowerAngle);
-
-        console.log(this.gameSpeed);
     }
 
     start(gameSpeed, canvas, ctx) {
         if(this.intervalID !== null) return;
-        
-        console.log(this.direction);
 
         this.direction = { x: 1, y: 0 };
         this.intervalID = setInterval(() => this.updateGame(canvas, ctx), gameSpeed);
-
-        console.log(this.gameSpeed);
-        console.log(this.direction);
+        
     }
 
     setDirection(nextDir) {
@@ -66,14 +60,14 @@ export class Game {
     
         // check if head don't touch borders
         if (head.x >= maxX || head.x < 0 || head.y >= maxY || head.y < 0){
-            this.gameOver();
+            this.gameOver(ctx);
             return;
         }
     
         // check if snake head don't touch snake body
         for(let i = 1; i < this.snakeItemsPos.length; i++) {
             if(head.x === this.snakeItemsPos[i].x && head.y === this.snakeItemsPos[i].y) {
-                gameOver();
+                this.gameOver(ctx);
                 return;
             }
         }
@@ -82,7 +76,8 @@ export class Game {
         if(head.x === this.flowerGridPosition.x && head.y === this.flowerGridPosition.y) {
             isEating = true;
             snakeEatingAudiosound();
-            updateScore();
+            this.updateScore();
+
             reinitializeSpeedFlowerRotation();
             this.flowerGridPosition = setNewGridFlowerPosition(canvas);
             drawFlower(ctx, this.flowerGridPosition, this.flowerAngle);
@@ -107,6 +102,7 @@ export class Game {
     
         drawFlower(ctx, this.flowerGridPosition, this.flowerAngle);
         drawSnake(ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
+        console.log(SNAKE_INIT);
     }
     
 
@@ -116,17 +112,20 @@ export class Game {
         this.score += 1;
     }
 
-    gameOver() {
-        console.log("Game Over");
-        // gameOverAudiosound();
-        // clearInterval(intervalID);
+    gameOver(ctx) {
+        gameOverAudiosound();
+        clearInterval(this.intervalID);
+        this.intervalID = null;
 
-        // ctx.fillStyle = "#ffffff"
-        // ctx.font = "48px sans-serif";
-        // ctx.textAlign = "center";
-        // ctx.textBaseline = "middle";
-        // ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+        ctx.fillStyle = "#ffffff"
+        ctx.font = "48px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
     }
 
-
+    replay(ctx){
+        clearInterval(this.intervalID);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 }

@@ -40,7 +40,7 @@ canvas.height = maxY * GRID_SIZE;
 // snake positions
 // let snakeItemsPos = SNAKE_INIT;
 
-const game = new Game();
+let game = new Game();
 console.log(game);
 
 let gameSpeed = game.gameSpeed;
@@ -83,7 +83,9 @@ btnStart.addEventListener("click", () => {
 
 // Replay game - reset the game at initial state
 btnReplay.addEventListener("click", () => {
-    resetGameToInitialState();
+    game.replay(ctx);
+    game = new Game();
+    game.init(canvas, ctx);
 });
 
 // key controls direction //
