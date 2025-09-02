@@ -161,12 +161,12 @@ For the design of our game, we have used this example to create our interface wi
 
 [Subframe - Pixel Legends Showcase](https://www.subframe.com/tips/css-pixel-art-examples)
 
-With the font "Press start" font familly:
+With the font familly "Press start" :
 ```css
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 ```
 
-The same colors shart:
+The same colours shart:
 ```css
 :root {
   --primary: #ff6b6b;
