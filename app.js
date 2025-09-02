@@ -22,35 +22,46 @@ canvas.height = 20 * GRID_SIZE;
 let maxX = canvas.width/GRID_SIZE;
 let maxY = canvas.height/GRID_SIZE;
 
+
 //const RECT_RADIUS = 4;
 
 // game speed
 // let gameSpeed = 300;
 
 // initialize direction
-let direction = { x: 0, y: 0};
+// let direction = { x: 0, y: 0};
 
 // score
-let score = 0;
+// let score = 0;
 
 // declare intervalID for interval id
 // let intervalID;
 
 // snake positions
-let snakeItemsPos = SNAKE_INIT;
+// let snakeItemsPos = SNAKE_INIT;
 
-// const game = new Game(score, direction);
-// console.log(game.snakeItemsPos);
+const game = new Game();
+console.log(game);
 
-// flower position 
-let flowerGridPosition = setNewGridFlowerPosition(canvas);
-let flowerAngle = 0;
+let gameSpeed = game.gameSpeed;
 
-// draw intialise //
-drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS);
-drawFlower(ctx, flowerGridPosition, flowerAngle);
+game.init(canvas, ctx);
+
 displayScore();
 
+// // flower position 
+// let flowerGridPosition = setNewGridFlowerPosition(canvas);
+// let flowerAngle = 0;
+
+// // draw intialise //
+// drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS);
+// drawFlower(ctx, flowerGridPosition, flowerAngle);
+// displayScore();
+
+// Display score
+function displayScore() {
+    return scoreDisplay.innerText = `Score : ${game.score}`;
+}
 
 
 // button events //
@@ -66,7 +77,7 @@ btnSpeedChoice.forEach (btn => {
 
 // start game
 btnStart.addEventListener("click", () => {
-   startGame();
+   game.start(gameSpeed);
 });
 
 // Replay game - reset the game at initial state
@@ -84,12 +95,12 @@ buttons.forEach(button => {
 console.log(direction);
 
 // key controls direction //
-window.addEventListener("keydown", (event) => handleKeyDown(event, direction), true);
+window.addEventListener("keydown", (event) => direction = handleKeyDown(event, direction), true);
 
 console.log(direction);
 
 // start a new game
-// function startGame(gameSpeed) {
+// function start(gameSpeed) {
 //     direction= {x:1, y:0};
 //     if(intervalID == null) {
 //         intervalID = setInterval(updateGame, gameSpeed);
@@ -152,15 +163,15 @@ function updateGame() {
     drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS);
 }
 
-// Update score
-function updateScore() {
-    score += 1;
-}
+// // Update score
+// function updateScore() {
+//     score += 1;
+// }
 
-// Display score
-function displayScore() {
-    return scoreDisplay.innerText = `Score : ${score}`;
-}
+// // Display score
+// function displayScore() {
+//     return scoreDisplay.innerText = `Score : ${score}`;
+// }
 
 // Game over
 function gameOver() {

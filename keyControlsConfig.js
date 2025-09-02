@@ -1,7 +1,7 @@
 
 export function handleKeyDown(event, direction) {
     if (event.defaultPrevented) {
-    return; // Do nothing if the event was already processed
+        return; // Do nothing if the event was already processed
     }
     switch (event.key) {
         case "ArrowDown":
@@ -34,4 +34,5 @@ export function handleKeyDown(event, direction) {
     
     event.preventDefault();
 
+    return direction;
 }
