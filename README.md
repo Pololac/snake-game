@@ -33,33 +33,42 @@ You can reset the game at any time by clicking on "Replay".
 
 #### Main concepts (Patrick)
 
-After looking for some snake game examples, we have determined the need for the game design to have a canva where the snake will move and the food will appear with an animation frame. 
-Based on the [M mdn] (https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) ressource, for creating this frame, we have used Canvas API and `<canvas id="canvas"></canvas>` HTML element.
+# Snake Game – Canvas Implementation
 
-The size of the canvas is declared in our main JS code file app.js :
-`const canvas = document.getElementById("canvas");`
-`canvas.width = 600;`
-`canvas.height = 400;`
+After looking for some snake game examples, we determined that the game design needs a canvas where the snake will move and the food will appear with an animation frame.  
+Based on the [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) resource, to create this frame, we used the Canvas API and the `<canvas id="canvas"></canvas>` HTML element.  
 
-Canvas API provides methods to draw and animate graphics in the navigator.
+The size of the canvas is declared in our main JS file `app.js`:
 
-By using what is named the context, we can then declared that we will desing a 2D environment :
+```js
+const canvas = document.getElementById("canvas");
+canvas.width = 600;
+canvas.height = 400;
+```
 
-`const ctx = canvas.getContext("2d");`
+The Canvas API provides methods to draw and animate graphics in the browser.
 
-With this context, you can declare what you will needed in this canvas such a this form which will constitute an element for our snake.
+By using what is called the context, we can declare that we will use a 2D environment:
 
-This will draw a rectangle with a specified border radius and color:
+```js
+const ctx = canvas.getContext("2d");
+```
 
-`ctx.beginPath();`
-`ctx.moveTo(x, y + radius);`
-`ctx.arcTo(x, y + height, x + radius, y + height, radius);`
-`ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);`
-`ctx.arcTo(x + width, y, x + width - radius, y, radius);`
-`ctx.arcTo(x, y, x, y + radius, radius);`
-`ctx.closePath();`
-`ctx.fillStyle = color;`
-`ctx.fill();`
+With this context, you can define what you need in this canvas, such as this shape which will constitute an element of our snake.
+
+This draws a rectangle with a specified border radius and color:
+
+```js
+ctx.beginPath();
+ctx.moveTo(x, y + radius);
+ctx.arcTo(x, y + height, x + radius, y + height, radius);
+ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+ctx.arcTo(x + width, y, x + width - radius, y, radius);
+ctx.arcTo(x, y, x, y + radius, radius);
+ctx.closePath();
+ctx.fillStyle = color;
+ctx.fill();
+```
 
 Each segment of the snake will have differents following x,y coordinates.
 
