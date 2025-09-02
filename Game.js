@@ -1,4 +1,4 @@
-import {SNAKE_INIT, SPEED_DEFAULT, GRID_SIZE, maxX, maxY, RECT_RADIUS} from "./config.js";
+import {SNAKE_INIT, SPEED_DEFAULT, GRID_SIZE, xCells, yCells, RECT_RADIUS} from "./config.js";
 import { drawSnake } from "./snakeDesign.js";
 import { drawFlower, setNewGridFlowerPosition, slowDownFlowerRotation, reinitializeSpeedFlowerRotation } from "./flowerDesign.js";
 import {gameOverAudiosound, snakeEatingAudiosound, snakeMovingAudiosound} from "./soundDesign.js";
@@ -58,7 +58,7 @@ export class Game {
         }
     
         // check if head don't touch borders
-        if (head.x >= maxX || head.x < 0 || head.y >= maxY || head.y < 0){
+        if (head.x >= xCells || head.x < 0 || head.y >= yCells || head.y < 0){
             this.gameOver(ctx);
             return;
         }
