@@ -1,4 +1,4 @@
-import { GRID_SIZE } from "./constants.js";
+import { GRID_SIZE } from "./config.js";
 
 
 // Positionnement aléatoire dans grille
