@@ -9,7 +9,7 @@ We used 2 JavaScript APIs:
 - **Web Audio API** → the sound design.
 
 
-## :video_game: Play the game
+# :video_game: Play the game
 
 Choose a difficulty and click on "Start".
 
@@ -17,7 +17,7 @@ Use the arrow key directions on your keyboard to move the snake. The goal is to 
 
 You can reset the game at any time by clicking on "Replay".
 
-### Rules Reminder
+## Rules Reminder
 - The goal is to eat food (e.g., apples, flowers, dots) that appears randomly on the grid.
 - Each time the snake eats, it grows longer and the score increases.
 - The game ends if the snake:
@@ -27,13 +27,13 @@ You can reset the game at any time by clicking on "Replay".
 - The challenge is to survive as long as possible while making the snake as long as you can.
 
 
-## :bulb: Conception
+# :bulb: Conception
 
-### API Canvas
+## API Canvas
 
-#### Main concepts (Patrick)
+### Main concepts
 
-# Snake Game – Canvas Implementation
+### Canvas Implementation
 
 After looking for some snake game examples, we determined that the game design needs a canvas where the snake will move and the food will appear with an animation frame.  
 Based on the [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) resource, to create this frame, we used the Canvas API and the `<canvas id="canvas"></canvas>` HTML element.  
@@ -70,6 +70,8 @@ ctx.fillStyle = color;
 ctx.fill();
 ```
 
+### Canvas animation
+
 Each segment of the snake will have differents following x,y coordinates.
 
 At this first step, we have used the same element for drawing the food of the snake on the canvas.
@@ -87,6 +89,9 @@ To animate an element in the canvas, you have to change the x,y coordinates base
 Preventing elements from going out of the canvas was easy, as you just have to use the width and height of the canvas in your movement conditions.
 
 But in a snake game, the snake moves in a specific way: the last element takes the coordinates of the previous one. In addition, if the snake eats itself, the game is over.
+
+### grid
+
 Considering the collision checks we need to implement and the food design, we were advised to use a grid.
 
 The grid significantly simplifies the game design and collision checks.
@@ -109,11 +114,14 @@ setInterval(() => gameLoop(), gameSpeed);
 ```
 
 
-### Snake (Patrick)
+# Snake 
 
-In the direction of the grid, we also have been suggested to use an array of coordinates for the snake as follow :
+As we will use a grid, we also have been suggested to use an array of coordinates for the snake as follow :
 
-`const SNAKE = [{ x: 14, y: 10 }, { x: 13, y: 10 }, { x: 12, y: 10 }, { x: 11, y: 10 }];`
+```js 
+const SNAKE = [{ x: 14, y: 10 }, { x: 13, y: 10 }, { x: 12, y: 10 }, { x: 11, y: 10 }];
+```
+
 
 The first element 
 
