@@ -23,19 +23,20 @@ export class Game {
         this.flowerAngle = 0;
     }
 
-    init(canvas, ctx) {
+    init(canvas, ctx, scoreDiv) {
         this.flowerGridPosition = setNewGridFlowerPosition(canvas);
         this.flowerAngle = 0;
+        this.displayScore(scoreDiv);
         
         drawSnake(ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
         drawFlower(ctx, this.flowerGridPosition, this.flowerAngle);
     }
 
-    start(gameSpeed, canvas, ctx) {
+    start(gameSpeed, canvas, ctx, scoreDiv) {
         if(this.intervalID !== null) return;
 
         this.direction = { x: 1, y: 0 };
-        this.intervalID = setInterval(() => this.updateGame(canvas, ctx), gameSpeed);
+        this.intervalID = setInterval(() => this.updateGame(canvas, ctx, scoreDiv), gameSpeed);
         
     }
 
@@ -49,7 +50,7 @@ export class Game {
     }
 
 
-    updateGame(canvas, ctx) {
+    updateGame(canvas, ctx, scoreDiv) {
         let isEating = false;
     
         // create new head
@@ -77,6 +78,7 @@ export class Game {
             isEating = true;
             snakeEatingAudiosound();
             this.updateScore();
+            this.displayScore(scoreDiv);
 
             reinitializeSpeedFlowerRotation();
             this.flowerGridPosition = setNewGridFlowerPosition(canvas);
@@ -110,6 +112,10 @@ export class Game {
     // Update score
     updateScore() {
         this.score += 1;
+    }
+
+    displayScore(scoreDiv) {
+        return scoreDiv.innerText = `Score : ${this.score}`;
     }
 
     gameOver(ctx) {

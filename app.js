@@ -8,7 +8,7 @@ import {handleKeyDown} from "./keyControlsConfig.js";
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const scoreDisplay = document.getElementById("score");
+const scoreDiv = document.getElementById("score");
 
 const buttons = document.querySelectorAll("button");
 const btnStart = document.getElementById("btn-start");
@@ -45,8 +45,8 @@ console.log(game);
 
 let gameSpeed = game.gameSpeed;
 
-game.init(canvas, ctx);
-displayScore();
+game.init(canvas, ctx, scoreDiv);
+// displayScore();
 
 // // flower position 
 // let flowerGridPosition = setNewGridFlowerPosition(canvas);
@@ -58,9 +58,9 @@ displayScore();
 // displayScore();
 
 // Display score
-function displayScore() {
-    return scoreDisplay.innerText = `Score : ${game.score}`;
-}
+// function displayScore() {
+//     return scoreDisplay.innerText = `Score : ${game.score}`;
+// }
 
 
 // button events //
@@ -78,7 +78,7 @@ btnSpeedChoice.forEach (btn => {
 // start game
 btnStart.addEventListener("click", () => {
     console.log("Btn Start clicked");
-   game.start(gameSpeed, canvas, ctx);
+   game.start(gameSpeed, canvas, ctx, scoreDiv);
 });
 
 // Replay game - reset the game at initial state
