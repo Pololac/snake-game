@@ -114,18 +114,36 @@ setInterval(() => gameLoop(), gameSpeed);
 ```
 
 
-## Snake 
+## Snake
+
+### Initial state design
 
 As we will use a grid, we also have been suggested to use an array of coordinates for the snake as follow :
 
-```js 
+```js
 const SNAKE = [{ x: 14, y: 10 }, { x: 13, y: 10 }, { x: 12, y: 10 }, { x: 11, y: 10 }];
 ```
 
+This array of coordinates object will then represent our snake in with the first element will be the head.
 
-The first element 
+We just have to create a loop as follow to draw our snake:
 
-position of all the elements composing the snake in an array, drawing elements & animation
+```js
+function drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS) {
+    snakeItemsPos.forEach((segment, idx) => {
+        if(idx === 0) {
+            roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "green");
+        } else {
+            roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "blue");
+        }
+    })
+}
+```
+
+Here you have a hungry little snake of 1 head and 3 segments at the given coordinates. :snake:
+
+For moving the snake, we will have to change the coordinates as detailed below.
+
 
 ### Food = Flower (Paul)
 
