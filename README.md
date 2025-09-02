@@ -2,36 +2,44 @@
 
 # :snake: Snake game
 
-Snake game coded in vanilla JS with keyboard controls and retro graming design.
+Snake game coded in **vanilla JavaScript** with keyboard controls and retro gaming design.
 
-We used canvas API for the animations and web audio API both provided by javascript
+We used 2 JavaScript APIs: 
+- **Canvas API** → drawings & animations.
+- **Web Audio API** → the sound design.
 
-Coded by Paul & Patrick
 
-# :video_game: Play the game
+## :video_game: Play the game
 
-Choose a difficulty and click on "start"
+Choose a difficulty and click on "Start".
 
-Use the arrow key directions on your keyboard to move the snake and eat the flower
+Use the arrow key directions on your keyboard to move the snake. The goal is to eat as many flowers as you can.
 
-You can reset the game by clicking on "replay"
+You can reset the game at any time by clicking on "Replay".
 
-# :bulb: Conception
+### Rules Reminder
+- The goal is to eat food (e.g., apples, flowers, dots) that appears randomly on the grid.
+- Each time the snake eats, it grows longer and the score increases.
+- The game ends if the snake:
+    - hits the walls (border of the play area), or
+    - runs into its own body.
 
-## First steps
+- The challenge is to survive as long as possible while making the snake as long as you can.
 
-What is a snake game? Principles
-Discovery of Canvas API
 
-## Canvas
+## :bulb: Conception
+
+### API Canvas
+
+#### Main concepts
 
 grid and drawing  
 
-## Snake
+### Snake
 
 position of all the elements composing the snake in an array, drawing elements
 
-## Food snake
+### Food snake
 
 (flower) : initialy a simple square
 
@@ -43,18 +51,22 @@ UpdateGame : snake moving, eating food
 GameEnding : collision on the borders, or snake eating itself
 
 
-# :art: Design UI/UX
+## :art: Design UI/UX (Patrick)
 
 [Subframe - Pixel Legends Showcase]
 (https://www.subframe.com/tips/css-pixel-art-examples)
 
 Inspiration by the design to create our interface with retro pixel design and audio sound. 
 
-# :sound: Sound design
+## :sound: Sound design (Patrick)
 
 Using Web Audio API and examples from Subframe
 
-# :computer: Refactoring
+## :computer: Refactoring (Patrick : )
 
 Modules
 Class Game
+
+
+## 👨‍💻 Authors
+Coded by @Pololac & @PatrickLaubscher.
