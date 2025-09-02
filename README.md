@@ -44,10 +44,13 @@ The size of the canvas is declared in our main JS code file app.js :
 Canvas API provides methods to draw and animate graphics in the navigator.
 
 By using what is named the context, we can then declared that we will desing a 2D environment :
+
 `const ctx = canvas.getContext("2d");`
 
 With this context, you can declare what you will needed in this canvas such a this form which will constitute an element for our snake.
+
 This will draw a rectangle with a specified border radius and color:
+
 `ctx.beginPath();`
 `ctx.moveTo(x, y + radius);`
 `ctx.arcTo(x, y + height, x + radius, y + height, radius);`
@@ -58,16 +61,48 @@ This will draw a rectangle with a specified border radius and color:
 `ctx.fillStyle = color;`
 `ctx.fill();`
 
-At this first step, we have used the same element for drawing the food of the snake. 
+Each segment of the snake will have differents following x,y coordinates.
 
+At this first step, we have used the same element for drawing the food of the snake on the canvas.
 
+Now that we have a small and snake and food, we have looked into the animation part.
 
+Canvas API suggests several functions : `setInterval()`, `setTimeout()`, and `requestAnimationFrame()`;
 
+`requestAnimationFrame()` was the first we tried. It returns a callback as a timestamp in millisecond and you can use it with conditions.
 
-grid 
-animation : RefreshAnimationFrame
+After some tests, we have prefered to use the `setInterval()` function will be easier for us to use as we wanted to add several speed game options.
+
+For animating an element in the canvas, you have to change the x,y coordinates based on a velocity or a time interval.
+
+Preventing the elements go out of the canvas was easy as you just a have to use the width and height of the canvas in your moving conditions.
+
+But in a snake game, the snake is moving in a specified way, in which the last element keep the coordinates of the previous one. In addition, if the snake eats him self the game is over.
+Concidering the collisions verifications we will have to implement and the design of the food, we have been suggested to use a grid.
+
+The grid simplifies significately the design of the game and the collision verifications.
+
+Below are the grid configuration of our game. Each gird will be square of 20x20 pixels and the canvas wil have 30x20 grids.
+
+`GRID_SIZE = 20;`
+`maxX = 30;`
+`maxY = 20;`
+
+Then the animation of the snake will be as follow, at each game loop it will move by one grid. The speed of the snake will be specified by our variable `gameSpeed`;
+
+The display of the score will be in div element and declared at 0.
+
+Then at the start of the game, we will use the following setInterval: `setInterval(() => gameLoop(), gameSpeed);`
+
 
 ### Snake (Patrick)
+
+In the direction of the grid, we also have been suggested to use an array of coordinates for the snake as follow :
+
+`const SNAKE = [{ x: 14, y: 10 }, { x: 13, y: 10 }, { x: 12, y: 10 }, { x: 11, y: 10 }];`
+
+The first element 
+
 position of all the elements composing the snake in an array, drawing elements & animation
 
 ### Food = Flower (Paul)
