@@ -33,7 +33,38 @@ You can reset the game at any time by clicking on "Replay".
 
 #### Main concepts (Patrick)
 
-grid / drawing
+After looking for some snake game examples, we have determined the need for the game design to have a canva where the snake will move and the food will appear with an animation frame. 
+Based on the [M mdn] (https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) ressource, for creating this frame, we have used Canvas API and `<canvas id="canvas"></canvas>` HTML element.
+
+The size of the canvas is declared in our main JS code file app.js :
+`const canvas = document.getElementById("canvas");`
+`canvas.width = 600;`
+`canvas.height = 400;`
+
+Canvas API provides methods to draw and animate graphics in the navigator.
+
+By using what is named the context, we can then declared that we will desing a 2D environment :
+`const ctx = canvas.getContext("2d");`
+
+With this context, you can declare what you will needed in this canvas such a this form which will constitute an element for our snake.
+This will draw a rectangle with a specified border radius and color:
+`ctx.beginPath();`
+`ctx.moveTo(x, y + radius);`
+`ctx.arcTo(x, y + height, x + radius, y + height, radius);`
+`ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);`
+`ctx.arcTo(x + width, y, x + width - radius, y, radius);`
+`ctx.arcTo(x, y, x, y + radius, radius);`
+`ctx.closePath();`
+`ctx.fillStyle = color;`
+`ctx.fill();`
+
+At this first step, we have used the same element for drawing the food of the snake. 
+
+
+
+
+
+grid 
 animation : RefreshAnimationFrame
 
 ### Snake (Patrick)
