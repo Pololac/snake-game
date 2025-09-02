@@ -38,14 +38,13 @@ let direction = { x: 0, y: 0};
 
 
 // snake positions
-// let snakeItemsPos = [
-//     { x: 14, y: 10 },  // head
-//     { x: 13, y: 10 },  // segments...
-//     { x: 12, y: 10 },
-//     { x: 11, y: 10 }
-// ];
-const game = new Game();
-console.log(game.snakeItemsPos);
+let snakeItemsPos = [
+    { x: 14, y: 10 },  // head
+    { x: 13, y: 10 },  // segments...
+    { x: 12, y: 10 },
+    { x: 11, y: 10 }
+];
+
 
 // flower position 
 let flowerGridPosition = setNewGridFlowerPosition(canvas);
@@ -65,7 +64,7 @@ btnSpeedChoice.forEach (btn => {
     btn.addEventListener("click", () => {
         buttons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        gameSpeed = btn.dataset.speed, 10;
+        gameSpeed = btn.dataset.speed;
     });
 });
 
@@ -88,7 +87,11 @@ buttons.forEach(button => {
 
 
 // key controls direction //
-direction = keyControlsConfig(window, direction);
+window.addEventListener(
+    "keydown",
+    (event) => direction = keyControlsConfig(event, direction),
+    true
+);
 
 
 // start a new game
@@ -96,7 +99,7 @@ function startGame(gameSpeed) {
     direction= {x:1, y:0};
     if(gameLoop == null) {
         gameLoop = setInterval(updateGame, gameSpeed);
-    } 
+    }
 }
 
 // update game loop
@@ -153,6 +156,7 @@ function updateGame() {
 
     drawFlower(ctx, flowerGridPosition, flowerAngle);
     drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS);
+    console.log(direction);
 }
 
 // Update score
