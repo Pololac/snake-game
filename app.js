@@ -86,16 +86,21 @@ btnReplay.addEventListener("click", () => {
     resetGameToInitialState();
 });
 
+// key controls direction //
+window.addEventListener("keydown", (event) => {
+    const nextDir = handleKeyDown(event);
+    if (!nextDir) return;
+
+    game.setDirection(nextDir);   // ← on délègue à la classe
+    event.preventDefault();
+    }, true);
+
 // button sounds
 buttons.forEach(button => {
     button.addEventListener('click', () => {
         activateButtonSound();
     });
 });
-
-
-// key controls direction //
-window.addEventListener("keydown", (event) => direction = handleKeyDown(event, direction), true);
 
 
 // start a new game

@@ -43,8 +43,17 @@ export class Game {
 
         console.log(this.gameSpeed);
         console.log(this.direction);
-
     }
+
+    setDirection(nextDir) {
+        if ((this.direction.y !== 0 && nextDir.y !== 0)
+            || (this.direction.x !== 0 && nextDir.x !== 0)) {
+            return;
+        } else {
+            this.direction = nextDir;
+        }
+    }
+
 
     updateGame(canvas, ctx) {
         let isEating = false;
