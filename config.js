@@ -1,5 +1,7 @@
 // Grid
-export const GRID_SIZE = 20;
+export const GRID_SIZE = 20; // Taille en pixels d'une cellule de la grille
+export const maxX = 30; // Nombre de cellules horizontales
+export const maxY = 20; // Nombre de cellules verticales
 
 // Snake draw
 export const RECT_RADIUS = 4;
