@@ -1,9 +1,9 @@
 import {Game} from "./Game.js";
 import {drawSnake} from "./snakeDesign.js";
-import {GRID_SIZE, RECT_RADIUS} from "./constants.js";
+import {GRID_SIZE, RECT_RADIUS, SNAKE_INIT} from "./config.js";
 import {setNewGridFlowerPosition, drawFlower, slowDownFlowerRotation, reinitializeSpeedFlowerRotation} from "./flowerDesign.js";
 import {activateButtonSound, gameOverAudiosound, snakeEatingAudiosound, snakeMovingAudiosound} from "./soundDesign.js";
-import {keyControlsConfig} from "./keyControlsConfig.js";
+import {handleKeyDown} from "./keyControlsConfig.js";
 
 
 const canvas = document.getElementById("canvas");
@@ -25,27 +25,22 @@ let maxY = canvas.height/GRID_SIZE;
 //const RECT_RADIUS = 4;
 
 // game speed
-let gameSpeed = 300;
-
-// score
-let score = 0;
-
-// declare gameLoop for interval id
-let gameLoop;
+// let gameSpeed = 300;
 
 // initialize direction
 let direction = { x: 0, y: 0};
 
+// score
+let score = 0;
+
+// declare intervalID for interval id
+// let intervalID;
 
 // snake positions
-// let snakeItemsPos = [
-//     { x: 14, y: 10 },  // head
-//     { x: 13, y: 10 },  // segments...
-//     { x: 12, y: 10 },
-//     { x: 11, y: 10 }
-// ];
-const game = new Game();
-console.log(game.snakeItemsPos);
+let snakeItemsPos = SNAKE_INIT;
+
+// const game = new Game(score, direction);
+// console.log(game.snakeItemsPos);
 
 // flower position 
 let flowerGridPosition = setNewGridFlowerPosition(canvas);
@@ -86,18 +81,20 @@ buttons.forEach(button => {
     });
 });
 
+console.log(direction);
 
 // key controls direction //
-direction = keyControlsConfig(window, direction);
+window.addEventListener("keydown", (event) => handleKeyDown(event, direction), true);
 
+console.log(direction);
 
 // start a new game
-function startGame(gameSpeed) {
-    direction= {x:1, y:0};
-    if(gameLoop == null) {
-        gameLoop = setInterval(updateGame, gameSpeed);
-    } 
-}
+// function startGame(gameSpeed) {
+//     direction= {x:1, y:0};
+//     if(intervalID == null) {
+//         intervalID = setInterval(updateGame, gameSpeed);
+//     } 
+// }
 
 // update game loop
 function updateGame() {
@@ -168,7 +165,7 @@ function displayScore() {
 // Game over
 function gameOver() {
     gameOverAudiosound();
-    clearInterval(gameLoop);
+    clearInterval(intervalID);
 
     ctx.fillStyle = "#ffffff"
     ctx.font = "48px sans-serif";
@@ -180,9 +177,9 @@ function gameOver() {
 // reset game to initial state and stop actual game
 function resetGameToInitialState() {
 
-    // stop and reset gameLoop
-    clearInterval(gameLoop);
-    gameLoop = null;
+    // stop and reset intervalID
+    clearInterval(intervalID);
+    intervalID = null;
     // reset score
     score = 0;
     // reset draw context
