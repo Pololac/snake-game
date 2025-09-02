@@ -155,22 +155,103 @@ UpdateGame : snake moving, eating food
 GameEnding : collision on the borders, or snake eating itself
 
 
-# :art: Design UI/UX (Patrick)
+# :art: Design UI/UX 
 
-[Subframe - Pixel Legends Showcase]
-(https://www.subframe.com/tips/css-pixel-art-examples)
+For the design of our game, we have used this example to create our interface with retro pixel design and audio sound.
 
-Inspiration by the design to create our interface with retro pixel design and audio sound. 
+[Subframe - Pixel Legends Showcase](https://www.subframe.com/tips/css-pixel-art-examples)
 
-# :sound: Sound design (Patrick)
+With the font "Press start" font familly:
+```css
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+```
 
-Using Web Audio API and examples from Subframe
+The same colors shart:
+```css
+:root {
+  --primary: #ff6b6b;
+  --secondary: #4ecdc4;
+  --dark: #1a1a2e;
+  --light: #f8f9fa;
+  --console-green: #92f29c;
+}
+```
+
+
+
+# :sound: Sound design
+
+In the same design here : [Subframe - Pixel Legends Showcase](https://www.subframe.com/tips/css-pixel-art-examples)
+
+We used Web Audio API for the sound animation. Same as Canvas API, Web Audio API is used to create an audio context:
+```js 
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+window.audioCtx = new AudioContext(); 
+```
+
+Then when an audio context is declared you can create digital sound with specified oscillator and gainode for the shape and design of the sound :
+
+```js
+if (window.audioCtx) {
+          const oscillator = window.audioCtx.createOscillator();
+          const gainNode = window.audioCtx.createGain();
+          
+          oscillator.type = 'square';
+          oscillator.frequency.setValueAtTime(100, window.audioCtx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(300, window.audioCtx.currentTime + 0.1);
+          
+          gainNode.gain.setValueAtTime(0.05, window.audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.1);
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(window.audioCtx.destination);
+          
+          oscillator.start();
+          oscillator.stop(window.audioCtx.currentTime + 0.1);
+    }
+```
+
+Here below our function used when a button is activated :
+
+```js
+function activateButtonSound() {
+
+    if (typeof audioCtx === 'undefined') {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        window.audioCtx = new AudioContext();
+    }
+    
+    if (window.audioCtx) {
+        const oscillator = window.audioCtx.createOscillator();
+        const gainNode = window.audioCtx.createGain();
+        
+        oscillator.type = 'square';
+        oscillator.frequency.setValueAtTime(200, window.audioCtx.currentTime);
+        oscillator.frequency.setValueAtTime(150, window.audioCtx.currentTime + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.1, window.audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioCtx.currentTime + 0.2);
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(window.audioCtx.destination);
+        
+        oscillator.start();
+        oscillator.stop(window.audioCtx.currentTime + 0.2);
+    }
+}
+```
+
+
 
 # :computer: Refactoring (Patrick : modules, Paul : class)
 
 Modules
 Class Game
 
+
+# Perspectives of improvements
+
+TBD
 
 # 👨‍💻 Authors
 Coded by @Pololac & @PatrickLaubscher.
