@@ -1,5 +1,5 @@
 import {Game} from "./Game.js";
-import {GRID_SIZE, maxX, maxY} from "./config.js";
+import {GRID_SIZE, xCells, yCells} from "./config.js";
 import {activateButtonSound} from "./soundDesign.js";
 import {handleKeyDown} from "./keyControlsConfig.js";
 
@@ -13,8 +13,8 @@ const btnStart = document.getElementById("btn-start");
 const btnReplay = document.getElementById("btn-replay");
 const btnSpeedChoice = document.querySelectorAll("#speed-buttons button");
 
-canvas.width = maxX * GRID_SIZE;
-canvas.height = maxY * GRID_SIZE;
+canvas.width = xCells * GRID_SIZE;
+canvas.height = yCells * GRID_SIZE;
 
 let game = new Game();
 let gameSpeed = game.gameSpeed;

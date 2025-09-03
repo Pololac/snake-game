@@ -1,7 +1,7 @@
 // Sizes of the Grid cells and the Grid
 export const GRID_SIZE = 20; // Size in pixels of a grid cell
-export const maxX = 30; // Number of horizontal cells
-export const maxY = 20; // Number of vertical cells
+export const xCells = 30; // Number of horizontal cells
+export const yCells = 20; // Number of vertical cells
 
 // Drawing of the elements of the snake
 export const RECT_RADIUS = 4;
