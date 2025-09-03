@@ -464,6 +464,152 @@ function activateButtonSound() {
 
 # :computer: Refactoring
 
+## Modules
+
+### Config, utils, sound design
+
+In the refactoring process and for creating the modules, at first we have created a module `config.js` for our constants providing the values of :
+
+- grid size
+- radius for the snake element
+- position and state for the snake at start
+- the default speed of the game
+
+```js
+// Sizes of the Grid cells and the Grid
+export const GRID_SIZE = 20; // Size in pixels of a grid cell
+export const xCells = 30; // Number of horizontal cells
+export const yCells = 20; // Number of vertical cells
+
+// Drawing of the elements of the snake
+export const RECT_RADIUS = 4;
+
+// Coordinates of the snake elements in the grid at initialization
+export const SNAKE_INIT = [
+    { x: 14, y: 10 },  // head
+    { x: 13, y: 10 },  // segments...
+    { x: 12, y: 10 },
+    { x: 11, y: 10 }
+];
+
+// Game speed by default
+export const SPEED_DEFAULT = 300;
+```
+
+Some general used functions have been declared in a separate module `utils.js`:
+
+```js
+import { GRID_SIZE } from "./config.js";
+
+export function randomCellPosition(cellsNumber) {
+    return Math.floor(Math.random() * cellsNumber);
+}
+
+export function cellToPx(cellIndex) {
+    return (cellIndex + 0.5) * GRID_SIZE;
+}
+```
+
+An identical process has been used of the sound design functions in the `soundDesign.js`module which are just called when they are needed whithout modification from their previous code in the non-factoring code.
+
+### snake & flower draw
+
+The second part which was the drawing of our elements it was in these functions that we needed to pass in parameter the context `ctx` of our canvas and then modify them accordingly:
+
+```js
+// rectangle with border radius
+export function roundedRect(ctx, x, y, width, height, radius, color) {
+    ctx.beginPath();
+    ctx.moveTo(x, y + radius);
+    ctx.arcTo(x, y + height, x + radius, y + height, radius);
+    ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
+    ctx.arcTo(x + width, y, x + width - radius, y, radius);
+    ctx.arcTo(x, y, x, y + radius, radius);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+}
+```
+
+All the drawing functions module need this context in parameter as they won't recognize the general variable in `app.js`.
+
+### key controls
+
+This was the most delicate part as the key controls are using an event listener on the window variable of the main js script.
+We can't import the whole function in a separate module.
+
+In addition as the directions value are used the main Game class (see below) we had to modify our primary control algorithm.
+
+Then in this new version for the module, the `keyControlsConfig.js` returns only the directions value when the specified key board control is down.
+The conditions verification stay in `app.js` and will be moved later in our `Game.js` class:
+
+- before refactoring :
+
+```js
+/ event listener keyboard
+window.addEventListener(
+  "keydown",
+  (event) => {
+    if (event.defaultPrevented) {
+      return; // Do nothing if the event was already processed
+    }
+
+    switch (event.key) {
+        case "ArrowDown":
+            if(yDir === 0) {
+                yDir = 1;
+            }
+            xDir = 0;
+            break;
+        case "ArrowUp":
+            if(yDir === 0) {
+                yDir = -1;
+            };
+            xDir = 0;
+            break;
+        case "ArrowLeft":
+            yDir = 0;
+            if(xDir === 0) {
+                xDir = -1;
+            }
+            break;
+        case "ArrowRight":
+            yDir = 0;
+            if(xDir === 0) {
+                xDir = 1;
+            }
+            break;
+        case "Enter":
+            //
+            break;
+        case " ":
+            //
+            break;
+        default:
+            return; // Quit when this doesn't handle the key event.
+    }
+
+    // Cancel the default action to avoid it being handled twice
+    event.preventDefault();
+  },
+  true,
+);
+```
+
+- in the new module:
+
+```js
+export function handleKeyDown(event) {
+    switch (event.key) {
+        case "ArrowDown":  return { x: 0,  y: 1 };
+        case "ArrowUp":    return { x: 0,  y: -1 };
+        case "ArrowLeft":  return { x: -1, y: 0 };
+        case "ArrowRight": return { x: 1,  y: 0 };
+        default:           return null;
+    };
+}
+```
+
 ## The Game class
 
 The Game class is the central component that manages the snake’s state, the flower, the score, and the game loop.
