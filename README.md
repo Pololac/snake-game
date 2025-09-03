@@ -270,10 +270,11 @@ function slowDownFlowerRotation(flowerAngle) {
 ### Game start
 
 Starts the game loop :
-    - Sets the initial snake direction (moving right).
-    - Launches a timed loop (setInterval) that repeatedly calls updateGame() at the given speed.
-    - Prevents multiple loops from being started at once.  
-    NB: we save the `intervalID` here so that we could end the loop later.
+- Sets the initial snake direction (moving right).
+- Launches a timed loop (setInterval) that repeatedly calls updateGame() at the given speed.
+- Prevents multiple loops from being started at once.
+
+NB: we save the `intervalID` here so that we could end the loop later.
 
 ```javascript
 start(gameSpeed, canvas, ctx, scoreDiv) {
