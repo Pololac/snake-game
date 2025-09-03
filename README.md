@@ -422,7 +422,7 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 window.audioCtx = new AudioContext(); 
 ```
 
-Then when an audio context is declared you can create digital sound with specified oscillator and gainode for the shape and design of the sound :
+Then, when an audio context is declared, you can create digital sound with specified oscillator and gainNode for the shape and design of the sound :
 
 ```js
 if (window.audioCtx) {
@@ -444,7 +444,7 @@ if (window.audioCtx) {
     }
 ```
 
-Here below our function used when a button is activated :
+Here is the function used when a button is activated : 
 
 ```js
 function activateButtonSound() {
@@ -479,13 +479,13 @@ function activateButtonSound() {
 ## Modules
 
 ### Config, utils, sound design
+#### Config
+As part of the refactoring process and the creation of modules, we first created a `config.js` module to hold our constants, providing values for :
 
-In the refactoring process and for creating the modules, at first we have created a module `config.js` for our constants providing the values of :
-
-- grid size
-- radius for the snake element
-- position and state for the snake at start
-- the default speed of the game
+- Grid size
+- Corner radius of the snake’s square element.
+- Position and state for the snake at start
+- Default speed of the game
 
 ```js
 // Sizes of the Grid cells and the Grid
@@ -508,6 +508,7 @@ export const SNAKE_INIT = [
 export const SPEED_DEFAULT = 300;
 ```
 
+#### Utils
 Some general used functions have been declared in a separate module `utils.js`:
 
 ```js
@@ -521,7 +522,7 @@ export function cellToPx(cellIndex) {
     return (cellIndex + 0.5) * GRID_SIZE;
 }
 ```
-
+#### Sound Design
 An identical process has been used of the sound design functions in the `soundDesign.js`module which are just called when they are needed whithout modification from their previous code in the non-factoring code.
 
 ### snake & flower draw
@@ -560,7 +561,7 @@ export function drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS) {
 
 All the drawing functions module need this context in parameter as they won't recognize the general variable in `app.js`.
 
-### key controls
+### Key controls
 
 This was the most delicate part as the key controls are using an event listener on the window variable of the main js script.
 We can't import the whole function in a separate module.
