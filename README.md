@@ -291,14 +291,28 @@ start(gameSpeed, canvas, ctx, scoreDiv) {
 
 Updates the game state at each tick of the loop.
 
-- Moves the snake by creating a new head in the current direction.
-
+- Snake animation : 
+  - Create a new head according to the chosen the keyboard direction
+  - Futur update of the snake’s body: keeps the new head and removes the tail (unless the snake has just eaten the flower).
 ```js
 const head = {
     x: this.snakeItemsPos[0].x + this.direction.x,
     y: this.snakeItemsPos[0].y + this.direction.y
 }
 ```
+
+```js
+// add new head and remove last element (unless it eats the flower)
+this.snakeItemsPos.unshift(head);
+
+if(isEating === false) {
+    this.snakeItemsPos.pop();
+}
+```
+
+
+<img src="https://github.com/PatrickLaubscher/snake-game/blob/main/images/snake-states.png" />
+
 
 - Checks for collisions with the walls or the snake’s own body → triggers `gameOver` function if detected.
 
@@ -337,22 +351,19 @@ if(head.x === this.flowerGridPosition.x && head.y === this.flowerGridPosition.y)
 }
 ```
 
-- Updates the snake’s body: keeps the new head and removes the tail (unless the snake has just eaten the flower).
-
-```js
-// add new head and remove last element (unless it eats the flower)
-this.snakeItemsPos.unshift(head);
-
-if(isEating === false) {
-    this.snakeItemsPos.pop();
-}
-```
-
-Plays the moving sound.
-
 - Clears the canvas and redraws a "new" scene:
   - Updates the flower’s rotation with friction.
   - Renders the flower and the snake in their new positions.
+```js
+snakeMovingAudiosound();
+    
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Rotate the flower
+this.flowerAngle = slowDownFlowerRotation(this.flowerAngle);
+
+drawFlower(ctx, this.flowerGridPosition, this.flowerAngle);
+drawSnake(ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
+```
 
 ### GameOver
 
