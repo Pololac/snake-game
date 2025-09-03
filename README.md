@@ -514,20 +514,35 @@ An identical process has been used of the sound design functions in the `soundDe
 
 ### snake & flower draw
 
-The second part which was the drawing of our elements it was in these functions that we needed to pass in parameter the context `ctx` of our canvas and then modify them accordingly:
+The second part which was the drawing of our elements it was in these functions that we needed to pass in parameter the context `ctx` of our canvas and then modify them accordingly :
+
+- before refactoring :
 
 ```js
-// rectangle with border radius
-export function roundedRect(ctx, x, y, width, height, radius, color) {
-    ctx.beginPath();
-    ctx.moveTo(x, y + radius);
-    ctx.arcTo(x, y + height, x + radius, y + height, radius);
-    ctx.arcTo(x + width, y + height, x + width, y + height - radius, radius);
-    ctx.arcTo(x + width, y, x + width - radius, y, radius);
-    ctx.arcTo(x, y, x, y + radius, radius);
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
+// draw snake elements
+function drawSnake() {
+    snakeItemsPos.forEach((segment, idx) => {
+        if(idx === 0) {
+            roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "green");
+        } else {
+            roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "blue");
+        }
+    })
+}
+```
+
+- in the `snakeDesign.js`module :
+
+```js
+// draw snake elements
+export function drawSnake(ctx, snakeItemsPos, GRID_SIZE, RECT_RADIUS) {
+    snakeItemsPos.forEach((segment, idx) => {
+        if(idx === 0) {
+            roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "green");
+        } else {
+            roundedRect(ctx, segment.x*GRID_SIZE, segment.y*GRID_SIZE, GRID_SIZE, GRID_SIZE, RECT_RADIUS, "blue");
+        }
+    })
 }
 ```
 
