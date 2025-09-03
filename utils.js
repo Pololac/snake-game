@@ -1,12 +1,12 @@
 import { GRID_SIZE } from "./config.js";
 
 
-// Positionnement aléatoire dans grille
+// Random position in the canva
 export function randomCellPosition(cellsNumber) {
     return Math.floor(Math.random() * cellsNumber);
 }
 
-// Convertir coordonnée de grille en pixel (centré dans la case)
+// Convert coordinates to pixels (the center of the grid)
 export function cellToPx(cellIndex) {
     return (cellIndex + 0.5) * GRID_SIZE;
 }
