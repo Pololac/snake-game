@@ -15,13 +15,17 @@ export class Game {
 
         // Game variables
         this.score = 0;
-        this.gameSpeed = SPEED_DEFAULT;
         this.snakeItemsPos = SNAKE_INIT.map(segment => ({...segment})); // Creating a copy so as not to mutate the original table
         this.direction = { x: 0, y: 0};
         this.flowerAngle = 0;
+        this.isGameOver = false;
 
         // Loop variables
-        this.intervalID = null; // ID used in setInterval
+        this.lastTs = 0;     // last RAF timestamp
+        this.acc = 0;        // temps accumulé 
+        this.rafId = null;   // loop ID to stop the loop
+        this.stepMs = SPEED_DEFAULT;   // gamespeed (time between 2 drawings)
+
     }
 
     init() {
@@ -33,12 +37,26 @@ export class Game {
         drawFlower(this.ctx, this.flowerGridPosition, this.flowerAngle);
     }
 
-    start(gameSpeed) {
-        if(this.intervalID !== null) return;
+    // Change speed
+    setSpeed(ms) {
+        this.stepMs = ms;
+    }
 
+    start() {
         this.direction = { x: 1, y: 0 };
-        this.intervalID = setInterval(() => this.updateGame(), gameSpeed);
-        
+
+        // Start the loop
+        this.lastTs = 0;
+        this.acc = 0;
+        this.rafId = requestAnimationFrame(this.loop.bind(this));
+    }
+
+    // Stop loop
+    stop() {
+        if (this.rafId) {
+          cancelAnimationFrame(this.rafId);
+          this.rafId = null;
+        }
     }
 
     setDirection(nextDir) {
@@ -48,6 +66,28 @@ export class Game {
         } else {
             this.direction = nextDir;
         }
+    }
+
+    // Main loop (ts = timestamp given by RAF)
+    loop(ts) {
+        if (this.isGameOver) return;             // To quickly stop the loop
+
+        if (!this.lastTs) this.lastTs = ts;
+        const delta = ts - this.lastTs;  // time since the last frame
+        this.lastTs = ts;
+
+        this.acc += delta;  // Time accumulation
+
+        // When the accumulated time exceeds the fixed step (stepMs), we run an update of the game. 
+        // The while loop ensures that, even if a frame is late (lag or low FPS), 
+        // the snake still moves the correct number of steps to maintain a consistent game speed.
+        while (this.acc >= this.stepMs) {
+            this.updateGame();
+            this.acc -= this.stepMs;
+        }
+
+        // Reloop
+        this.rafId = requestAnimationFrame(this.loop.bind(this));
     }
 
     updateGame() {
@@ -61,14 +101,14 @@ export class Game {
     
         // check if head don't touch borders
         if (head.x >= xCells || head.x < 0 || head.y >= yCells || head.y < 0){
-            this.gameOver(this.ctx);
+            this.gameOver();
             return;
         }
     
         // check if snake head don't touch snake body
         for(let i = 1; i < this.snakeItemsPos.length; i++) {
             if(head.x === this.snakeItemsPos[i].x && head.y === this.snakeItemsPos[i].y) {
-                this.gameOver(this.ctx);
+                this.gameOver();
                 return;
             }
         }
@@ -82,7 +122,7 @@ export class Game {
 
             reinitializeSpeedFlowerRotation();
             this.flowerGridPosition = setNewGridFlowerPosition(this.canvas);
-            drawFlower(ctx, this.flowerGridPosition, this.flowerAngle);
+            drawFlower(this.ctx, this.flowerGridPosition, this.flowerAngle);
         }
     
         // add new head and remove last element (unless it eats the flower)
@@ -111,9 +151,11 @@ export class Game {
     }
 
     gameOver() {
+        if (this.isGameOver) return;
+        this.isGameOver = true;
+
         gameOverAudiosound();
-        clearInterval(this.intervalID);
-        this.intervalID = null;
+        this.stop();
 
         this.ctx.fillStyle = "#ffffff"
         this.ctx.font = "48px sans-serif";
@@ -122,8 +164,21 @@ export class Game {
         this.ctx.fillText("Game Over", this.canvas.width / 2, this.canvas.height / 2);
     }
 
-    replay(){
-        clearInterval(this.intervalID);
+    reset() {
+        this.stop();
+
+        this.isGameOver = false;
+        this.score = 0;
+        this.direction = { x: 0, y: 0 };
+        this.snakeItemsPos = SNAKE_INIT.map(s => ({...s}));
+        this.flowerAngle = 0;
+        this.flowerGridPosition = setNewGridFlowerPosition(this.canvas);
+      
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.displayScore();
+
+        drawSnake(this.ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
+        drawFlower(this.ctx, this.flowerGridPosition, this.flowerAngle);
     }
+
 }

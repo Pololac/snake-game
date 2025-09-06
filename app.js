@@ -17,7 +17,7 @@ canvas.width = xCells * GRID_SIZE;
 canvas.height = yCells * GRID_SIZE;
 
 let game = new Game(canvas, ctx, scoreDiv);
-let gameSpeed = game.gameSpeed;
+let stepMs;
 
 game.init();
 
@@ -27,20 +27,20 @@ btnSpeedChoice.forEach (btn => {
     btn.addEventListener("click", () => {
         buttons.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-        gameSpeed = btn.dataset.speed, 10;
+        
+        const ms = parseInt(btn.dataset.speed, 10);
+        game.setSpeed(ms);
     });
 });
 
 // Start game
 btnStart.addEventListener("click", () => {
-   game.start(gameSpeed);
+   game.start();
 });
 
 // Replay game
 btnReplay.addEventListener("click", () => {
-    game.replay(ctx);
-    game = new Game(canvas, ctx, scoreDiv);
-    game.init();
+    game.reset();
 });
 
 // SOUND on BUTTONS CLICK //
