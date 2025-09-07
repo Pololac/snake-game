@@ -662,7 +662,10 @@ Make sure to pass the parameters (for example `canvas`, `ctx` or `scoreDiv`) tha
 
 # Perspectives of improvements
 
-TBD
+- Improve UI with description and controls
+- Add player name
+- Keep records of player score in a table sheet
+- update to a reponsive version (display + new key event)
 
 # 👨‍💻 Authors
 
