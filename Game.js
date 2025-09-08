@@ -155,10 +155,8 @@ export class Game {
 
     displayScore() {
         this.scoreDiv.innerText = `Score : ${this.score}`;
-    displayScore() {
-        this.scoreDiv.innerText = `Score : ${this.score}`;
     }
-
+    
     gameOver() {
         if (this.isGameOver) return;
         this.isGameOver = true;
