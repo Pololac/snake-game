@@ -80,9 +80,14 @@ Now that we have a small and snake and food, we have looked into the animation p
 
 Canvas API suggests several functions : `setInterval()`, `setTimeout()`, and `requestAnimationFrame()`;
 
-`requestAnimationFrame()` was the first one we tried. It returns a callback as a timestamp in milliseconds and you can use it with conditions.
-
 After some tests, we have preferred to use the `setInterval()` function, as it was easier for us to manage since we wanted to add several game speed options.
+
+But the Request Animation Frame is more suitable to created online game like this one, so we finally implement it. 
+The function returns a callback as a timestamp in milliseconds and you can use it with conditions.
+
+```js 
+this.rafId = requestAnimationFrame(this.loop.bind(this));
+```
 
 To animate an element in the canvas, you have to change the x,y coordinates based on a velocity or a time interval.
 
@@ -104,14 +109,21 @@ maxX = 30;
 maxY = 20;
 ```
 
-Then the animation of the snake will be as follow, at each game loop it will move by one grid. The speed of the snake will be specified by our variable `gameSpeed`;
-
-The display of the score will be in div element and declared at 0.
-
-Then at the start of the game, we will use the following setInterval:
+Then the animation of the snake will be as follow, at each game loop it will move by one grid. The speed of the snake will be specified by our property :
 
 ```js
-setInterval(() => gameLoop(), gameSpeed);
+    // Change speed
+    setSpeed(ms) {
+        this.stepMs = ms;
+    }
+```
+
+The display of the score will be in a div element and declared at 0.
+
+At the start of the game, we will start the animation frame and keep it in a variable : 
+
+```js
+this.rafId = requestAnimationFrame(this.loop.bind(this));
 ```
 
 ## Snake
@@ -271,20 +283,18 @@ function slowDownFlowerRotation(flowerAngle) {
 
 Starts the game loop :
 - Sets the initial snake direction (moving right).
-- Launches a timed loop (setInterval) that repeatedly calls updateGame() at the given speed.
+- Launches a request animation frame (raf) and repeatedly calls updateGame() at the given speed step in ms `stepMs`
 - Prevents multiple loops from being started at once.
 
-NB: we save the `intervalID` here so that we could end the loop later.
-
 ```javascript
-start(gameSpeed, canvas, ctx, scoreDiv) {
-    if(this.intervalID !== null) return;
+    start() {
+        this.direction = { x: 1, y: 0 };
 
-    this.direction = { x: 1, y: 0 };
-
-    this.intervalID = setInterval(() => this.updateGame(canvas, ctx, scoreDiv), gameSpeed);
-    
-}
+        // Start the loop
+        this.lastTs = 0;
+        this.acc = 0;
+        this.rafId = requestAnimationFrame(this.loop.bind(this));
+    }
 ```
 
 ### Game update
@@ -370,20 +380,30 @@ drawSnake(ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
 Ends the current game session :
 
 - Plays the game over sound effect.
-- Stops the game loop by clearing the active interval.
+- Stops the game loop by cancelling the raf
 - Displays a “Game Over” message centered on the canvas.
 
 ```js
-gameOver(ctx) {
-    gameOverAudiosound();
-    clearInterval(this.intervalID);
-    this.intervalID = null;
+// Stop loop
+stop() {
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+}
 
-    ctx.fillStyle = "#ffffff"
-    ctx.font = "48px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+gameOver(ctx) {
+    if (this.isGameOver) return;
+    this.isGameOver = true;
+
+    gameOverAudiosound();
+    this.stop();
+
+    this.ctx.fillStyle = "#ffffff"
+    this.ctx.font = "48px sans-serif";
+    this.ctx.textAlign = "center";
+    this.ctx.textBaseline = "middle";
+    this.ctx.fillText("Game Over", this.canvas.width / 2, this.canvas.height / 2);
 }
 ```
 
