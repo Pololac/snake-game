@@ -20,6 +20,7 @@ let game = new Game(canvas, ctx, scoreDiv);
 let stepMs;
 
 game.init();
+game.init();
 
 // BUTTONS EVENTLISTENERS //
 // Difficulty choice

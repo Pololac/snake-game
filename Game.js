@@ -35,6 +35,8 @@ export class Game {
         
         drawSnake(this.ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
         drawFlower(this.ctx, this.flowerGridPosition, this.flowerAngle);
+        drawSnake(this.ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
+        drawFlower(this.ctx, this.flowerGridPosition, this.flowerAngle);
     }
 
     // Change speed
@@ -123,6 +125,8 @@ export class Game {
             reinitializeSpeedFlowerRotation();
             this.flowerGridPosition = setNewGridFlowerPosition(this.canvas);
             drawFlower(this.ctx, this.flowerGridPosition, this.flowerAngle);
+            this.flowerGridPosition = setNewGridFlowerPosition(this.canvas);
+            drawFlower(this.ctx, this.flowerGridPosition, this.flowerAngle);
         }
     
         // add new head and remove last element (unless it eats the flower)
@@ -135,9 +139,12 @@ export class Game {
         snakeMovingAudiosound();
     
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         // Rotate the flower
         this.flowerAngle = slowDownFlowerRotation(this.flowerAngle);
     
+        drawFlower(this.ctx, this.flowerGridPosition, this.flowerAngle);
+        drawSnake(this.ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
         drawFlower(this.ctx, this.flowerGridPosition, this.flowerAngle);
         drawSnake(this.ctx, this.snakeItemsPos, GRID_SIZE, RECT_RADIUS);
     }
@@ -146,6 +153,8 @@ export class Game {
         this.score += 1;
     }
 
+    displayScore() {
+        this.scoreDiv.innerText = `Score : ${this.score}`;
     displayScore() {
         this.scoreDiv.innerText = `Score : ${this.score}`;
     }
