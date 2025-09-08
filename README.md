@@ -126,6 +126,34 @@ At the start of the game, we will start the animation frame and keep it in a var
 this.rafId = requestAnimationFrame(this.loop.bind(this));
 ```
 
+The `loop` method uses the `stepMs` as condition check in the call back :
+
+```js
+// Main loop (ts = timestamp given by RAF)
+loop(ts) {
+    if (this.isGameOver) return;             // To quickly stop the loop
+
+    if (!this.lastTs) this.lastTs = ts;
+    const delta = ts - this.lastTs;  // time since the last frame
+    this.lastTs = ts;
+
+    this.acc += delta;  // Time accumulation
+
+    // When the accumulated time exceeds the fixed step (stepMs), we run an update of the game. 
+    // The while loop ensures that, even if a frame is late (lag or low FPS), 
+    // the snake still moves the correct number of steps to maintain a consistent game speed.
+    while (this.acc >= this.stepMs) {
+        this.updateGame();
+        this.acc -= this.stepMs;
+    }
+
+    // Reloop
+    this.rafId = requestAnimationFrame(this.loop.bind(this));
+}
+```
+
+Now we have our animation loop and we have to create our game logic in `updateGame()` and how we animate the snake and the flower.
+
 ## Snake
 
 ### Initial state design
