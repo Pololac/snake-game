@@ -16,10 +16,10 @@ const btnSpeedChoice = document.querySelectorAll("#speed-buttons button");
 canvas.width = xCells * GRID_SIZE;
 canvas.height = yCells * GRID_SIZE;
 
-let game = new Game();
+let game = new Game(canvas, ctx, scoreDiv);
 let gameSpeed = game.gameSpeed;
 
-game.init(canvas, ctx, scoreDiv);
+game.init();
 
 // BUTTONS EVENTLISTENERS //
 // Difficulty choice
@@ -33,14 +33,14 @@ btnSpeedChoice.forEach (btn => {
 
 // Start game
 btnStart.addEventListener("click", () => {
-   game.start(gameSpeed, canvas, ctx, scoreDiv);
+   game.start(gameSpeed);
 });
 
 // Replay game
 btnReplay.addEventListener("click", () => {
     game.replay(ctx);
-    game = new Game();
-    game.init(canvas, ctx, scoreDiv);
+    game = new Game(canvas, ctx, scoreDiv);
+    game.init();
 });
 
 // SOUND on BUTTONS CLICK //
