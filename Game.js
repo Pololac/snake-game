@@ -164,6 +164,13 @@ export class Game {
         gameOverAudiosound();
         this.stop();
 
+        const payload = {
+            score: this.score ?? 0,
+            stepMs: this.stepMs,
+            createdAt: Date.now()
+        };
+        document.dispatchEvent(new CustomEvent('snake:gameover', { detail: payload }));
+
         this.ctx.fillStyle = "#ffffff"
         this.ctx.font = "48px sans-serif";
         this.ctx.textAlign = "center";
