@@ -35,25 +35,36 @@
     </div>
 
     <section class="game-area">
+      <div class="controls-help" aria-label="Controls">
+        <h2>Movement</h2>
+        <p class="hint">Use the arrow keys :</p>
+        <div class="keypad">
+          <div class="key" id="key-up"    title="Arrow Up">▲</div>
+          <div class="key" id="key-left"  title="Arrow Left">◀</div>
+          <div class="key" id="key-right" title="Arrow Right">▶</div>
+          <div class="key" id="key-down"  title="Arrow Down">▼</div>
+        </div>
+      </div>
+
       <div class="game-display">
         <canvas id="canvas"></canvas>
         <div id="score">Score :</div>
+        <div class="controls buttons-row">
+          <button class="retro-btn" id="btn-start">Start</button>
+          <button class="retro-btn" id="btn-replay">Replay</button>
+        </div>
       </div>
-      <aside class="leaderboard">
+
+      <div class="leaderboard" aria-label="Leaderboard">
         <h2>Leaderboard</h2>
         <ol id="lb-list" class="lb-list"></ol>
         <div class="lb-actions">
           <button id="lb-clear" class="view-toggle">Reset</button>
         </div>
-      </aside>
+      </div>
     </section>
     
 
-
-    <div class="controls buttons-row">
-      <button class="retro-btn" id="btn-start">Start</button>
-      <button class="retro-btn" id="btn-replay">Replay</button>
-    </div>
     
     
     <footer class="footer">
