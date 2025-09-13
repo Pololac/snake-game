@@ -1,0 +1,76 @@
+name: Deploy Snake to VPS (rsync over SSH)
+
+on:
+  push:
+    branches: [ "main" ]   # change si ta branche par défaut n'est pas main
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-snake
+  cancel-in-progress: true
+
+env:
+  DEPLOY_SOURCE: "."       # pas de build, on déploie tout le repo (hors exclusions)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare SSH
+        run: |
+          set -e
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p "${{ secrets.VPS_PORT }}" "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Ensure remote path exists
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_PATH: ${{ secrets.VPS_PATH }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "mkdir -p '$VPS_PATH'"
+
+      - name: Deploy via rsync over SSH
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_PATH: ${{ secrets.VPS_PATH }}
+          DEPLOY_SOURCE: ${{ env.DEPLOY_SOURCE }}
+        run: |
+          set -e
+          RSYNC_RSH="ssh -i ~/.ssh/id_ed25519 -p $VPS_PORT -o StrictHostKeyChecking=yes"
+          rsync -az --delete \
+            --rsh="$RSYNC_RSH" \
+            --chmod=D755,F644 \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            --exclude "README.md" \
+            --exclude ".DS_Store" \
+            "$DEPLOY_SOURCE"/ \
+            "$VPS_USER@$VPS_HOST:$VPS_PATH/"
+
+      # (Optionnel) Purge cache très léger (timestamp sur index.html)
+      - name: Touch index to bust cache (optional)
+        if: always()
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_PATH: ${{ secrets.VPS_PATH }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -p "$VPS_PORT" "$VPS_USER@$VPS_HOST" "touch '$VPS_PATH/index.html'"
+
+      # (Optionnel) Vérifier que Nginx sert bien le site (remplace l’URL)
+      - name: Health check
+        run: |
+          curl -I https://snake.placoste.dev | head -n 5
