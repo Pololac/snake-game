@@ -39,22 +39,56 @@ if (playerName) {
 
 // SET LEADERBOARD
 function renderLeaderboardFor(stepMs) {
-    const list = loadLeaderboardFor(stepMs);
-    lbList.innerHTML = '';
-    if (!list.length) {
-        lbList.innerHTML = '<li class="lb-item"><span>Aucun score pour le moment.</span></li>';
+    // --- Validation de stepMs ---
+    if (typeof stepMs !== 'number' || !Number.isFinite(stepMs) || stepMs < 0) {
+        console.warn('renderLeaderboardFor : stepMs invalide');
         return;
     }
-    list.forEach((e, idx) => {
+
+    const list = loadLeaderboardFor(stepMs);
+    // On part du principe que loadLeaderboardFor renvoie toujours un tableau.
+    // Sinon, on le normalise :
+    const safeList = Array.isArray(list) ? list : [];
+
+    // Nettoyage du conteneur
+    lbList.textContent = '';
+
+    if (!safeList.length) {
+        const emptyItem = document.createElement('li');
+        emptyItem.className = 'lb-item';
+        emptyItem.textContent = 'Aucun score pour le moment.';
+        lbList.appendChild(emptyItem);
+        return;
+    }
+
+    safeList.forEach((e, idx) => {
+        // Validation minimale des champs attendus
+        const name   = typeof e.name === 'string' ? e.name : '—';
+        const score  = typeof e.score === 'number' ? e.score : '0';
+        const created = new Date(e.createdAt);
+        const dateStr = isNaN(created) ? '' : formatDate(created);
+
         const li = document.createElement('li');
         li.className = 'lb-item';
-        li.innerHTML = `
-        <div>
-            <strong>${idx + 1}. ${e.name}</strong>
-            <div class="lb-meta">${formatDate(e.createdAt)}</div>
-        </div>
-        <div><strong>${e.score}</strong></div>
-        `;
+
+        // Construction du DOM de façon sûre
+        const wrapperLeft = document.createElement('div');
+        const strongRankName = document.createElement('strong');
+        strongRankName.textContent = `${idx + 1}. ${name}`;
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'lb-meta';
+        metaDiv.textContent = dateStr;
+
+        wrapperLeft.appendChild(strongRankName);
+        wrapperLeft.appendChild(metaDiv);
+
+        const wrapperRight = document.createElement('div');
+        const strongScore = document.createElement('strong');
+        strongScore.textContent = String(score);
+        wrapperRight.appendChild(strongScore);
+
+        li.appendChild(wrapperLeft);
+        li.appendChild(wrapperRight);
         lbList.appendChild(li);
     });
 }
