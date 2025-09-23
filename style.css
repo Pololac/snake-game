@@ -104,6 +104,7 @@ canvas::before {
 
 /* leaderboard section */
 .leaderboard {
+  max-width: 300px;
   text-align: left;
   font-size: 12px;
   color: var(--light);
@@ -304,7 +305,7 @@ canvas::before {
 }
 
 /* === Responsive === */
-@media (max-width: 960px) {
+@media (max-width: 1100px) {
   .container { max-width: 680px; }       /* redevient compact */
   .game-area {
     grid-template-columns: 1fr;
