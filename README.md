@@ -712,7 +712,7 @@ Make sure to pass the parameters (for example `canvas`, `ctx` or `scoreDiv`) tha
 
 - Improve UI with description and controls
 - Add player name
-- Keep records of player score in a table sheet
+- Keep records of player score in a table sheet : first locally in the LocalStorage and then globally on a server PHP/SQLite.
 - update to a reponsive version (display + new key event)
 - game design: change on scoring related to difficulty 
 
