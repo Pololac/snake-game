@@ -1,6 +1,6 @@
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" />
 
-# :snake: Snake game
+# 	&#128013; Snake game
 
 Snake game coded in **vanilla JavaScript** with keyboard controls and retro gaming design.
 
@@ -9,7 +9,7 @@ We used 2 JavaScript APIs:
 - **Canvas API** → drawings & animations.
 - **Web Audio API** → the sound design.
 
-# :video_game: Play the game
+# &#127918; Play the game
 
 Choose a difficulty and click on "Start".
 
@@ -27,7 +27,7 @@ You can reset the game at any time by clicking on "Replay".
 
 - The challenge is to survive as long as possible while making the snake as long as you can.
 
-# :bulb: Conception
+# &#128161; Conception
 
 ## API Canvas
 
@@ -435,7 +435,7 @@ gameOver(ctx) {
 }
 ```
 
-# :art: Design UI/UX
+# &#127912; Design UI/UX
 
 For the design of our game, we have used this example to create our interface with retro pixel design and audio sound.
 
@@ -459,7 +459,7 @@ The same colours shart:
 }
 ```
 
-# :sound: Sound design
+# &#128264; Sound design
 
 In the same design here : [Subframe - Pixel Legends Showcase](https://www.subframe.com/tips/css-pixel-art-examples)
 
@@ -522,7 +522,7 @@ function activateButtonSound() {
 }
 ```
 
-# :computer: Refactoring
+# &#128187; Refactoring
 
 ## Modules
 
